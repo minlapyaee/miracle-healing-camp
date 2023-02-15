@@ -9,7 +9,7 @@ const theme = createTheme({
         darkColor: "#000000",
         whiteColor: "#ffffff",
         secondary: {
-            main:  "#36B6F9"
+            main:  "#f9c937"
         }
     }
 });

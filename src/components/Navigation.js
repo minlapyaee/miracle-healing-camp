@@ -16,15 +16,43 @@ import {
   Toolbar,
   Typography,
   Link,
+  Button,
 } from "@mui/material/";
 import DragHandleIcon from "@mui/icons-material/DragHandle";
+import AuthModal from "./AuthModal";
 
-const navItems = ["Home", "Blogs", "Services", "Contact Us"];
+const navItems = [
+  {
+    name: "Home",
+  },
+  {
+    name: "Blogs",
+    url: "",
+  },
+  {
+    name: "Services",
+    url: "",
+  },
+  {
+    name: "About Us",
+    url: "about-us",
+  },
+  {
+    name: "Contact Us",
+    url: "",
+  },
+  {
+    name: "Get Started",
+    url: "",
+  },
+];
 
 function Navigation(props) {
   const [mobileOpen, setMobileOpen] = useState(false);
+  const [openModal, setOpenModal] = useState(false);
 
   const handleDrawerToggle = () => setMobileOpen((prevState) => !prevState);
+  const handleCloseModal = () => setOpenModal(false);
 
   const drawer = (
     <Box onClick={handleDrawerToggle} sx={{ textAlign: "center" }}>
@@ -33,19 +61,32 @@ function Navigation(props) {
       </Typography>
       <Divider />
       <List>
-        {navItems.map((item) => (
-          <ListItem key={item} disablePadding>
-            <ListItemButton sx={{ textAlign: "center" }}>
-              <ListItemText primary={item} />
-            </ListItemButton>
-          </ListItem>
-        ))}
+        {navItems.map((item) =>
+          item.name === "Get Started" ? (
+            <Button
+              key={item}
+              disablePadding
+              onClick={() => setOpenModal(true)}
+            >
+              <Button variant="contained" color="secondary">
+                Get Started
+              </Button>
+            </Button>
+          ) : (
+            <ListItem key={item.name} disablePadding>
+              <ListItemButton sx={{ textAlign: "center" }}>
+                <ListItemText primary={item.name} />
+              </ListItemButton>
+            </ListItem>
+          )
+        )}
       </List>
     </Box>
   );
 
   return (
     <div>
+      <AuthModal openModal={openModal} handleCloseModal={handleCloseModal} />
       <AppBar
         position="absolute"
         component="nav"
@@ -122,24 +163,36 @@ function Navigation(props) {
           </Box>
 
           <Box sx={{ display: { xs: "none", sm: "block" } }}>
-            {navItems.map((item) => (
-              <Link
-                href="#"
-                variant="body2"
-                key={item}
-                sx={{
-                  color: "whiteColor",
-                  fontSize: 15,
-                  textDecoration: "none",
-                  marginRight: 4,
-                  "&:hover": {
-                    color: "secondary.main",
-                  },
-                }}
-              >
-                {item}
-              </Link>
-            ))}
+            {navItems.map((item) =>
+              item.name === "Get Started" ? (
+                <Button
+                  key={item}
+                  size="small"
+                  color="secondary"
+                  variant="contained"
+                  onClick={() => setOpenModal(true)}
+                >
+                  Get Started
+                </Button>
+              ) : (
+                <Link
+                  href={item.url}
+                  variant="body2"
+                  key={item.name}
+                  sx={{
+                    color: "whiteColor",
+                    fontSize: 15,
+                    textDecoration: "none",
+                    marginRight: 4,
+                    "&:hover": {
+                      color: "secondary.main",
+                    },
+                  }}
+                >
+                  {item.name}
+                </Link>
+              )
+            )}
           </Box>
         </Toolbar>
       </AppBar>
