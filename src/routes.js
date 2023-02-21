@@ -23,7 +23,7 @@ const routes = [
 
 const userRoutes = [
   {
-    path: "/home",
+    path: "/",
     key: "HOME",
     exact: "true",
     component: Home,

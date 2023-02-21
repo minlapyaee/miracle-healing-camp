@@ -1,15 +1,22 @@
 import {
   Button,
+  CircularProgress,
   FormControl,
   Modal,
   TextField,
   Typography,
 } from "@mui/material";
 import { Box } from "@mui/system";
-import { useState } from "react";
+import { useState, useContext } from "react";
+import api from "../config/api";
+import { UserContext } from "../context/userContext";
 
 const AuthModal = ({ openModal, handleCloseModal }) => {
+  const { setUser } = useContext(UserContext);
   const [showOTPForm, setShowOTPForm] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [loginResponseMessage, setloginResponseMessage] = useState("");
+  const [registerResponseMessage, setregisterResponseMessage] = useState("");
   const [formData, setFormData] = useState({
     email: "",
     password: "",
@@ -24,6 +31,8 @@ const AuthModal = ({ openModal, handleCloseModal }) => {
     passwordError: false,
     fullnameError: false,
   });
+  const [otpCode, setOtpCode] = useState("");
+  const [otpError, setOtpError] = useState("");
   const [showLoginForm, setShowLoginForm] = useState(true);
 
   const regexEmail =
@@ -83,6 +92,7 @@ const AuthModal = ({ openModal, handleCloseModal }) => {
   };
 
   const handleSubmit = async () => {
+    setloginResponseMessage(false);
     let gotError = false;
     const errorObject = {
       emailError: false,
@@ -97,7 +107,6 @@ const AuthModal = ({ openModal, handleCloseModal }) => {
       gotError = true;
       errorObject.passwordError = true;
     }
-    console.log(errorObject);
     if (gotError) {
       setError({ ...errorObject });
       gotError = false;
@@ -110,8 +119,24 @@ const AuthModal = ({ openModal, handleCloseModal }) => {
       passwordError: false,
       fullnameError: false,
     });
+    setLoading(true);
+    api
+      .post(
+        "/user/login",
+        JSON.stringify({ email: formData.email, password: formData.password })
+      )
+      .then((res) => {
+        setLoading(false);
+        if (res.success) {
+          setUser(res);
+        } else {
+          setloginResponseMessage(true);
+        }
+      })
+      .catch((err) => console.log("err", err));
   };
   const handleRegisterSubmit = async () => {
+    setregisterResponseMessage("");
     let gotError = false;
     const errorObject = {
       emailError: false,
@@ -144,8 +169,30 @@ const AuthModal = ({ openModal, handleCloseModal }) => {
       passwordError: false,
       fullnameError: false,
     });
-    console.log("weee");
-    setShowOTPForm(true);
+    setLoading(true);
+    api
+      .post(
+        "/user/register",
+        JSON.stringify({
+          fullname: formRegisterData.fullname,
+          email: formRegisterData.email,
+          password: formRegisterData.password,
+        })
+      )
+      .then((res) => {
+        setLoading(false);
+        console.log("Register=== ", res);
+        if (res.success) {
+          setShowOTPForm(true);
+        } else {
+          if (res.info === "user already existed.") {
+            setregisterResponseMessage("This account is already registered.");
+          } else {
+            setregisterResponseMessage("Something went wrong.");
+          }
+        }
+      })
+      .catch((err) => console.log("err", err));
   };
   const LoginInputs = () => {
     return (
@@ -160,6 +207,12 @@ const AuthModal = ({ openModal, handleCloseModal }) => {
         >
           Welcome Back
         </Typography>
+        {loginResponseMessage && (
+          <Typography variant="body2" color="red" align="center">
+            You have entered an incorrect email or password. <br />
+            Please note that both fields are case-sensitive.
+          </Typography>
+        )}
         <FormControl fullWidth>
           <Typography variant="subtitle2" mb={0.5}>
             Your E-mail Address
@@ -191,25 +244,32 @@ const AuthModal = ({ openModal, handleCloseModal }) => {
             data-testid="form-field-url"
             size="small"
             value={formData.password}
+            type="password"
           />
-          <Button
-            // loading={submit}
-            type="submit"
-            variant="contained"
-            sx={{
-              borderRadius: 99999,
-              width: "100%",
-              paddingTop: "1rem",
-              paddingBottom: "1rem",
-              fontWeight: 700,
-              textTransform: "none",
-              fontSize: 16,
-              marginTop: 4,
-            }}
-            onClick={handleSubmit}
-          >
-            Login
-          </Button>
+          {loading ? (
+            <Box display="flex" justifyContent="center" mt={4}>
+              <CircularProgress size={24} />
+            </Box>
+          ) : (
+            <Button
+              // loading={submit}
+              type="submit"
+              variant="contained"
+              sx={{
+                borderRadius: 99999,
+                width: "100%",
+                paddingTop: "1rem",
+                paddingBottom: "1rem",
+                fontWeight: 700,
+                textTransform: "none",
+                fontSize: 16,
+                marginTop: 4,
+              }}
+              onClick={handleSubmit}
+            >
+              Login
+            </Button>
+          )}
         </FormControl>
         <Box align="center">
           <Typography
@@ -253,6 +313,11 @@ const AuthModal = ({ openModal, handleCloseModal }) => {
         >
           Create an account
         </Typography>
+        {registerResponseMessage && (
+          <Typography variant="body2" color="red" align="center">
+            {registerResponseMessage}
+          </Typography>
+        )}
         <FormControl fullWidth>
           <Typography variant="subtitle2" mb={0.5}>
             Full name*
@@ -301,25 +366,32 @@ const AuthModal = ({ openModal, handleCloseModal }) => {
             error={error.passwordError}
             helperText={error.passwordError && "Required Field."}
             value={formRegisterData.password}
+            type="password"
           />
-          <Button
-            // loading={submit}
-            type="submit"
-            variant="contained"
-            sx={{
-              borderRadius: 99999,
-              width: "100%",
-              paddingTop: "1rem",
-              paddingBottom: "1rem",
-              fontWeight: 700,
-              textTransform: "none",
-              fontSize: 16,
-              marginTop: 4,
-            }}
-            onClick={handleRegisterSubmit}
-          >
-            Create
-          </Button>
+          {loading ? (
+            <Box display="flex" justifyContent="center" mt={4}>
+              <CircularProgress size={24} />
+            </Box>
+          ) : (
+            <Button
+              // loading={submit}
+              type="submit"
+              variant="contained"
+              sx={{
+                borderRadius: 99999,
+                width: "100%",
+                paddingTop: "1rem",
+                paddingBottom: "1rem",
+                fontWeight: 700,
+                textTransform: "none",
+                fontSize: 16,
+                marginTop: 4,
+              }}
+              onClick={handleRegisterSubmit}
+            >
+              Create
+            </Button>
+          )}
         </FormControl>
         <Box align="center">
           <Typography
@@ -349,50 +421,88 @@ const AuthModal = ({ openModal, handleCloseModal }) => {
     );
   };
 
+  const handleOtp = () => {
+    setOtpError("");
+    if (otpCode === "") {
+      return setOtpError("Required Field.");
+    }
+    setLoading(true);
+    api
+      .post(
+        "/user/verify_otp",
+        JSON.stringify({ otp_code: otpCode, email: formRegisterData.email })
+      )
+      .then((res) => {
+        setLoading(false);
+        if (res.success) {
+          setUser(res.data);
+        } else {
+          setOtpError("Something went wrong.");
+        }
+        console.log("res", res);
+      })
+      .catch((err) => {
+        console.log("err", err);
+      });
+  };
+
   const otpForm = () => {
     return (
       <>
-        <Typography
-          id="modal-modal-title"
-          variant="h6"
-          component="h2"
-          align="center"
-          fontWeight="bold"
-          color="primary"
-        >
-          Verify your account
-        </Typography>
-        <FormControl fullWidth>
-          <Typography variant="subtitle2" mb={0.5}>
-            OTP code*
+        <div>
+          <Typography
+            id="modal-modal-title"
+            variant="h6"
+            component="h2"
+            align="center"
+            fontWeight="bold"
+            color="primary"
+          >
+            Verify your account
           </Typography>
-          <TextField
-            name="password"
-            data-testid="form-field-url"
-            size="small"
+
+          <FormControl fullWidth sx={{ marginTop: 4 }}>
+            <Typography variant="subtitle2" mb={0.5}>
+              Key in the OTP sent to your email address.
+            </Typography>
+            <TextField
+              name="otp_code"
+              data-testid="form-field-url"
+              size="small"
+              error={otpError}
+              sx={{
+                ".MuiInputBase-input": { fontSize: 14 },
+              }}
+              value={otpCode}
+              helperText={otpError}
+              onChange={(e) => setOtpCode(e.target.value)}
+            />
+          </FormControl>
+        </div>
+        {loading ? (
+          <Box display="flex" justifyContent="center" mt={4}>
+            <CircularProgress size={24} />
+          </Box>
+        ) : (
+          <Button
+            // loading={submit}
+            type="submit"
+            variant="contained"
             sx={{
-              ".MuiInputBase-input": { fontSize: 14 },
+              borderRadius: 99999,
+              width: "100%",
+              paddingTop: "1rem",
+              paddingBottom: "1rem",
+              fontWeight: 700,
+              textTransform: "none",
+              fontSize: 16,
+              marginTop: 4,
             }}
-          />
-        </FormControl>
-        <Button
-          // loading={submit}
-          type="submit"
-          variant="contained"
-          sx={{
-            borderRadius: 99999,
-            width: "100%",
-            paddingTop: "1rem",
-            paddingBottom: "1rem",
-            fontWeight: 700,
-            textTransform: "none",
-            fontSize: 16,
-            marginTop: 4,
-          }}
-          onClick={() => console.log("")}
-        >
-          Done
-        </Button>
+            onClick={handleOtp}
+          >
+            Done
+          </Button>
+        )}
       </>
     );
   };
@@ -406,6 +516,12 @@ const AuthModal = ({ openModal, handleCloseModal }) => {
           passwordError: false,
         });
         handleCloseModal();
+        setShowOTPForm(false);
+        setloginResponseMessage(false);
+        setregisterResponseMessage("");
+        setFormData({ email: "", password: "" });
+        setFormRegisterData({ email: "", password: "", fullname: "" });
+        setShowLoginForm(true);
       }}
       aria-labelledby="modal-modal-title"
       aria-describedby="modal-modal-description"
@@ -416,7 +532,7 @@ const AuthModal = ({ openModal, handleCloseModal }) => {
           top: "50%",
           left: "50%",
           transform: "translate(-50%, -50%)",
-          width: 350,
+          width: 400,
           height: showLoginForm ? 400 : 450,
           bgcolor: "whiteColor",
           boxShadow: 24,
@@ -424,7 +540,7 @@ const AuthModal = ({ openModal, handleCloseModal }) => {
           borderRadius: 3,
           display: "flex",
           flexDirection: "column",
-          justifyContent: "space-around",
+          justifyContent: showOTPForm ? "space-between" : "space-around",
         }}
       >
         {showOTPForm

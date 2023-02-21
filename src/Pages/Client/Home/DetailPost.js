@@ -1,22 +1,152 @@
-import React, { useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import {
   Avatar,
   Box,
   Button,
   Card,
   Chip,
+  CircularProgress,
   Paper,
+  Skeleton,
   TextField,
   Typography,
 } from "@mui/material";
+import { motion } from "framer-motion";
 import ThumbUpAltIcon from "@mui/icons-material/ThumbUpAlt";
 import ChatBubbleIcon from "@mui/icons-material/ChatBubble";
-
-let dummyText = `Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.. It has survived not only five centuries, but also the leap.Contrary to popular belief, Lorem Ipsum is not simply random text. It has roots in a piece of classical Latin literature from 45 BC, making it over 2000 years old. Richard McClintock, a Latin professor at Hampden-Sydney College in Virginia, looked up one of the more obscure Latin words, consectetur, from a Lorem Ipsum passage, and going through the cites of the word in classical literature, discovered the undoubtable source. Lorem Ipsum comes from sections 1.10.32 and 1.10.33 of "de Finibus Bonorum et Malorum" (The Extremes of Good and Evil) by Cicero, written in 45 BC. This book is a treatise on the theory of ethics, very popular during the Renaissance. The first line of Lorem Ipsum, "Lorem ipsum dolor sit amet..", comes from a line in section 1.10.32.
-The standard chunk of Lorem Ipsum used since the 1500s is reproduced below for those interested. Sections 1.10.32 and 1.10.33 from "de Finibus Bonorum et Malorum" by Cicero are also reproduced in their exact original form, accompanied by English versions from the 1914 translation by H. Rackham.The standard chunk of Lorem Ipsum used since the 1500s is reproduced below for those interested. Sections 1.10.32 and 1.10.33 from "de Finibus Bonorum et Malorum" by Cicero are also reproduced in their exact original form, accompanied by English versions from the 1914 translation by H. Rackham.The standard chunk of Lorem Ipsum used since the 1500s is reproduced below for those interested. Sections 1.10.32 and 1.10.33 from "de Finibus.`;
+import api from "../../../config/api";
+import { UserContext } from "../../../context/userContext";
+import { useParams } from "react-router-dom";
+import moment from "moment";
+import { useNavigate } from "react-router-dom";
 
 const DetailPost = () => {
+  const { user } = useContext(UserContext);
+  const [post, setPost] = useState(null);
+  const [commentList, setCommentList] = useState([]);
+  const [isLike, setIsLike] = useState(false);
   const [showCommentBox, setShowCommentBox] = useState(false);
+  const [commentVal, setCommentVal] = useState("");
+  const [loader, setLoader] = useState(true);
+  const [commentLoader, setCommentLoader] = useState(true);
+  const [createCmtLoader, setCreateCommentLoader] = useState(false);
+  const params = useParams();
+  const navigate = useNavigate();
+
+  const fetchPosts = (showLoader = true) => {
+    setLoader(showLoader);
+    console.log(params);
+    api
+      .get(
+        `/client/fetch_post_detail`,
+        { title: params.id },
+        {
+          accessToken: user.accessToken,
+          rftoken_id: localStorage.getItem("rftoken_id"),
+        }
+      )
+      .then((res) => {
+        setLoader(false);
+        console.log(res);
+        if (res.success) {
+          const isFound = res.data.likes.find(
+            (lik) => lik.created_by === user.user._id
+          );
+          if (isFound) {
+            setIsLike(true);
+          }
+          setPost(res.data);
+        }
+      })
+      .catch((err) => console.log(err));
+  };
+
+  const fetchComments = (showCmtLoader = true) => {
+    setCommentLoader(showCmtLoader);
+    api
+      .get(
+        `/client/fetch_comment`,
+        { post_id: post.post._id },
+        {
+          accessToken: user.accessToken,
+          rftoken_id: localStorage.getItem("rftoken_id"),
+        }
+      )
+      .then((res) => {
+        setCommentLoader(false);
+        if (res.success) {
+          setCommentList(res.data);
+        }
+      })
+      .catch((err) => console.log(err));
+  };
+
+  useEffect(() => {
+    // window.history.pushState(
+    //   "",
+    //   "",
+    //   window.location.origin + "/" + params.id.replace(" ", "-").toLowerCase()
+    // );
+    navigate("../detail-post/" + params.id.replaceAll(" ", "-"), {
+      replace: true,
+    });
+    fetchPosts();
+  }, [params.id]);
+
+  const handleCommentSubmit = () => {
+    setCreateCommentLoader(true);
+    let data = {
+      post_id: post.post._id,
+      content: commentVal,
+      post_owner_id: post.post.created_by._id,
+    };
+    api
+      .post("/client/create_comment", JSON.stringify(data), {
+        accessToken: user.accessToken,
+        rftoken_id: localStorage.getItem("rftoken_id"),
+      })
+      .then((res) => {
+        setCreateCommentLoader(false);
+        setCommentVal("");
+        fetchComments(false);
+        console.log("submit", res);
+      })
+      .catch((err) => {
+        console.log("submiterr", err);
+      });
+  };
+
+  const handleLike = (post_id, post_owner_id) => {
+    const clonePostList = post;
+
+    const findIndex = clonePostList.likes.findIndex(
+      (like) => like.created_by === user.user._id
+    );
+    if (findIndex === -1) {
+      clonePostList.likes.push({
+        created_by: user.user._id,
+      });
+      setIsLike(true);
+    } else {
+      clonePostList.likes.splice(clonePostList.likes.indexOf(findIndex), 1);
+      setIsLike(false);
+    }
+
+    setPost(clonePostList);
+
+    api
+      .post("/client/create_like", JSON.stringify({ post_id, post_owner_id }), {
+        accessToken: user.accessToken,
+        rftoken_id: localStorage.getItem("rftoken_id"),
+      })
+      .then((res) => {
+        console.log("res", res);
+        fetchPosts(false);
+      })
+      .catch((err) => {
+        console.log("errr", err);
+      });
+  };
 
   const CommentView = () => {
     return (
@@ -45,124 +175,215 @@ const DetailPost = () => {
             padding: 3,
           }}
         >
-          {/* Form */}
-          <Paper sx={{ padding: 2 }}>
-            <Box display="flex" alignItems="center">
-              <Avatar sx={{ marginRight: 2 }}>D</Avatar>
-              <Box>
-                <Typography variant="subtitle1" component="div">
-                  Denny
-                </Typography>
-              </Box>
-            </Box>
-            <TextField
-              placeholder="What are you thoughts?"
-              fullWidth
-              multiline
-              sx={{
-                border: "none",
-                "& fieldset": { border: "none" },
-                ".MuiInputBase-input": {
-                  fontSize: 13,
-                },
-              }}
-            />
-            <Box display="flex" justifyContent="flex-end" alignItems="center">
-              <Button sx={{ marginRight: 3 }}>
-                {" "}
-                <Typography
-                  sx={{ fontSize: 14, textTransform: "initial" }}
-                  variant="caption"
-                  onClick={() => setShowCommentBox(false)}
+          {commentLoader ? (
+            <div>
+              <Skeleton
+                variant="rectangular"
+                fullWidth
+                sx={{ marginTop: 2 }}
+                height={100}
+              />
+              <Skeleton
+                variant="rectangular"
+                fullWidth
+                sx={{ marginTop: 2 }}
+                height={100}
+              />
+              <Skeleton
+                variant="rectangular"
+                fullWidth
+                sx={{ marginTop: 2 }}
+                height={100}
+              />
+              <Skeleton
+                variant="rectangular"
+                fullWidth
+                sx={{ marginTop: 2 }}
+                height={100}
+              />
+            </div>
+          ) : (
+            <Box>
+              {/* Form */}
+              <Paper sx={{ padding: 2 }}>
+                <Box display="flex" alignItems="center">
+                  <Avatar sx={{ marginRight: 2 }}>
+                    {user.user.fullname[0]}
+                  </Avatar>
+                  <Box>
+                    <Typography variant="subtitle1" component="div">
+                      {user.user.fullname}
+                    </Typography>
+                  </Box>
+                </Box>
+                <TextField
+                  placeholder="What are you thoughts?"
+                  fullWidth
+                  multiline
+                  sx={{
+                    border: "none",
+                    "& fieldset": { border: "none" },
+                    ".MuiInputBase-input": {
+                      fontSize: 13,
+                    },
+                  }}
+                  value={commentVal}
+                  onChange={(e) => setCommentVal(e.target.value)}
+                />
+                <Box
+                  display="flex"
+                  justifyContent="flex-end"
+                  alignItems="center"
                 >
-                  Cancel
-                </Typography>
-              </Button>
-              <Button
-                size="medium"
-                variant="contained"
-                sx={{ borderRadius: 999 }}
-              >
-                <Typography
-                  sx={{ fontSize: 14, textTransform: "initial" }}
-                  variant="caption"
-                >
-                  Respond
-                </Typography>
-              </Button>
+                  <Button sx={{ marginRight: 3 }}>
+                    {" "}
+                    <Typography
+                      sx={{ fontSize: 14, textTransform: "initial" }}
+                      variant="caption"
+                      onClick={() => setShowCommentBox(false)}
+                    >
+                      Cancel
+                    </Typography>
+                  </Button>
+                  {createCmtLoader ? (
+                    <Box display="flex">
+                      <CircularProgress size={24} />
+                    </Box>
+                  ) : (
+                    <Button
+                      size="medium"
+                      variant="contained"
+                      sx={{ borderRadius: 999 }}
+                      onClick={handleCommentSubmit}
+                    >
+                      <Typography
+                        sx={{ fontSize: 14, textTransform: "initial" }}
+                        variant="caption"
+                      >
+                        Respond
+                      </Typography>
+                    </Button>
+                  )}
+                </Box>
+              </Paper>
+              {/* End Form */}
+              {/* Comments */}
+              <div id="comment-box">
+                {commentList.map((comment) => (
+                  <motion.div key={comment._id} layout>
+                    <Paper sx={{ padding: 2, marginTop: 2 }}>
+                      <Box display="flex" alignItems="center">
+                        <Avatar sx={{ marginRight: 2 }}>D</Avatar>
+                        <Box>
+                          <Typography variant="subtitle1" component="div">
+                            {comment.created_by.fullname}
+                          </Typography>
+                          <Typography
+                            variant="caption"
+                            component="div"
+                            sx={{ marginTop: -1, color: "#9F9F9F" }}
+                          >
+                            {" "}
+                            {moment(comment.created_at).format("LLL")}
+                          </Typography>
+                        </Box>
+                      </Box>
+                      <Typography fontSize={13} mt={3}>
+                        {comment.content}
+                      </Typography>
+                    </Paper>
+                  </motion.div>
+                ))}
+              </div>
+
+              {/* End Comments */}
             </Box>
-          </Paper>
-          {/* End Form */}
-          {/* Comments */}
-          <Paper sx={{ padding: 2, marginTop: 2 }}>
-            <Box display="flex" alignItems="center">
-              <Avatar sx={{ marginRight: 2 }}>D</Avatar>
-              <Box>
-                <Typography variant="subtitle1" component="div">
-                  Denny
-                </Typography>
-              </Box>
-            </Box>
-            <Typography fontSize={13} mt={3}>
-              This is one of the most beautiful things I’ve read. Thank you.
-            </Typography>
-          </Paper>
-          {/* End Comments */}
+          )}
         </Box>
       </div>
     );
   };
 
-  return (
-    <Box sx={{ marginTop: 6 }}>
-      {showCommentBox && <CommentView />}
-      <Card sx={{ padding: 2 }}>
-        <Box display="flex" alignItems="center">
-          <Avatar sx={{ marginRight: 2 }}>D</Avatar>
-          <Box>
-            <Typography variant="subtitle1" component="div">
-              Denny
-            </Typography>
-            <Typography
-              variant="caption"
-              component="div"
-              sx={{ marginTop: -1, color: "#9F9F9F" }}
-            >
-              {" "}
-              a few minutes ago{" "}
-            </Typography>
+  const handleClickCommentBox = () => {
+    setShowCommentBox(true);
+    fetchComments(false);
+  };
+
+  if (loader) {
+    return <Skeleton variant="rectangular" fullWidth mt={2} height={350} />;
+  }
+
+  if (post) {
+    return (
+      <Box sx={{ marginTop: 6 }}>
+        Hello
+        {showCommentBox && CommentView()}
+        <Card sx={{ padding: 2 }}>
+          <Box display="flex" alignItems="center">
+            <Avatar sx={{ marginRight: 2 }}>D</Avatar>
+            <Box>
+              <Typography variant="subtitle1" component="div">
+                {post.post.created_by.fullname}
+              </Typography>
+              <Typography
+                variant="caption"
+                component="div"
+                sx={{ marginTop: -1, color: "#9F9F9F" }}
+              >
+                {moment(post.post.created_at).format("LLL")}
+              </Typography>
+            </Box>
           </Box>
-        </Box>
-        <Box sx={{ marginTop: 2 }}>
-          <Typography variant="h6" fontWeight="bold">
-            What are the most common life mistakes young people make?
-          </Typography>
-          <Typography
-            color="#6C6C6C"
-            sx={{ fontSize: 17, lineHeight: 2, marginTop: 3 }}
-          >
-            {dummyText}
-          </Typography>
-          <Chip label="Story" sx={{ marginTop: 2 }} />
-        </Box>
-        <Box mt={2}>
-          <Button
-            sx={{ marginRight: 2, borderRadius: 99999 }}
-            // onClick={() => navigate("/detail-post/1")}
-          >
-            <ThumbUpAltIcon sx={{ color: "#636466", marginRight: 1 }} />0
-          </Button>
-          <Button
-            sx={{ borderRadius: 99999 }}
-            // onClick={() => navigate("/detail-post/1")}
-            onClick={() => setShowCommentBox(true)}
-          >
-            <ChatBubbleIcon sx={{ color: "#636466", marginRight: 1 }} />0
-          </Button>
-        </Box>
-      </Card>
-    </Box>
-  );
+          <Box sx={{ marginTop: 2 }}>
+            <Typography variant="h6" fontWeight="bold">
+              {post.post.title}
+            </Typography>
+            {post.post.type === "Story" && (
+              <>
+                <Typography
+                  color="#6C6C6C"
+                  sx={{
+                    fontSize: 17,
+                    lineHeight: 2,
+                    marginTop: 3,
+                    paddingLeft: 2,
+                  }}
+                >
+                  <Typography
+                    variant="body2"
+                    color="#6C6C6C"
+                    dangerouslySetInnerHTML={{ __html: post.post.content }}
+                  />
+                </Typography>
+              </>
+            )}
+
+            <Chip label="Story" sx={{ marginTop: 2 }} />
+          </Box>
+          <Box mt={2}>
+            <Button
+              sx={{ marginRight: 2, borderRadius: 99999 }}
+              onClick={() =>
+                handleLike(post.post._id, post.post.created_by._id)
+              }
+            >
+              <ThumbUpAltIcon
+                sx={{ color: isLike ? "#36B6F9" : "#636466", marginRight: 1 }}
+              />
+              {post.likes.length}
+            </Button>
+            <Button
+              sx={{ borderRadius: 99999 }}
+              // onClick={() => navigate("/detail-post/1")}
+              onClick={handleClickCommentBox}
+            >
+              <ChatBubbleIcon sx={{ color: "#636466", marginRight: 1 }} />
+            </Button>
+          </Box>
+        </Card>
+      </Box>
+    );
+  }
 };
 
 export default DetailPost;

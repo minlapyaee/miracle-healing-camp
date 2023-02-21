@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import PropTypes from "prop-types";
 import Box from "@mui/material/Box";
 import CssBaseline from "@mui/material/CssBaseline";
@@ -16,12 +16,16 @@ import Typography from "@mui/material/Typography";
 import { Link } from "react-router-dom";
 import { Button } from "@mui/material";
 import LogoutIcon from "@mui/icons-material/Logout";
+import { UserContext } from "../context/userContext";
+import { useNavigate } from "react-router-dom";
 
 const drawerWidth = 240;
 
 function UserNavigation(props) {
+  const { setUser } = useContext(UserContext);
   const [mobileOpen, setMobileOpen] = useState(false);
   const [selectedItem, setSelectedItem] = useState("Home");
+  const navigate = useNavigate();
 
   const { window } = props;
 
@@ -29,11 +33,18 @@ function UserNavigation(props) {
     setMobileOpen(!mobileOpen);
   };
 
+  const handleLogout = () => {
+    console.log("clicked");
+    localStorage.removeItem("rftoken_id");
+    navigate("/");
+    setUser({});
+  };
+
   const navItems = [
     {
       name: "Home",
       icon: <HomeIcon />,
-      url: "/home",
+      url: "/",
     },
     {
       name: "Book",
@@ -103,6 +114,7 @@ function UserNavigation(props) {
           sx={{
             width: "100%",
           }}
+          onClick={handleLogout}
         >
           <LogoutIcon sx={{ marginRight: 1, color: "#6C6C6C" }} />
           <Typography sx={{ color: "#6C6C6C" }}>Logout</Typography>
