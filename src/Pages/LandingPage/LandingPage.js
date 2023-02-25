@@ -1,63 +1,37 @@
-import React from "react";
+import React, { useState } from "react";
 import { Box, Button, Grid, Paper, Typography } from "@mui/material";
-import { ReactComponent as HeadIcon } from "../assets/head.svg";
-import { ReactComponent as QuizzIcon } from "../assets/quizz.svg";
-import { ReactComponent as CommunicateIcon } from "../assets/communicate.svg";
-import { ReactComponent as CalendarIcon } from "../assets/calendar.svg";
-import TherapyImage from "../assets/therapy.png";
-import CommunityImage from "../assets/community.png";
-import "./Home.css";
+import { ReactComponent as HeadIcon } from "../../assets/head.svg";
+import { ReactComponent as QuizzIcon } from "../../assets/quizz.svg";
+import { ReactComponent as CommunicateIcon } from "../../assets/communicate.svg";
+import { ReactComponent as CalendarIcon } from "../../assets/calendar.svg";
+import TherapyImage from "../../assets/therapy.png";
+import CommunityImage from "../../assets/community.png";
+import AuthModal from "../../components/AuthModal";
+import "./LandingPage.css";
+import Footer from "../../components/Footer";
 
-const aboutMHCItems = [
-  {
-    name: "About Us",
-  },
-  {
-    name: "Contact Us",
-  },
-  {
-    name: "Help/FAQs",
-  },
-  {
-    name: "Become a Member",
-  },
-  {
-    name: "Send Us Feedback",
-  },
-];
+const LandingPage = () => {
+  const [openModal, setOpenModal] = useState(false);
 
-const services = [
-  {
-    name: "Therapy",
-  },
-  {
-    name: "Psychiatry",
-  },
-  {
-    name: "Self care",
-  },
-  {
-    name: "Community",
-  },
-  {
-    name: "Free Quizzes",
-  },
-];
-
-const Home = () => {
+  const handleCloseModal = () => setOpenModal(false);
   return (
     <div className="landing_page_container">
+      <AuthModal openModal={openModal} handleCloseModal={handleCloseModal} />
       <div className="landing_page">
         <div className="landing_page_text_container">
           <Typography variant="h1" fontWeight={700}>
             <Typography variant="span" color="primary.main">
               Mental
             </Typography>{" "}
-            <Typography variant="span" color="secondary.main">
+            <Typography variant="span" color="primary.secondary">
               Health
             </Typography>
           </Typography>
-          <Typography textTransform="uppercase">
+          <Typography
+            textTransform="uppercase"
+            fontWeight="bold"
+            variant="body2"
+          >
             A delightful experience for you.
           </Typography>
           <Button
@@ -65,13 +39,14 @@ const Home = () => {
             color="secondary"
             size="large"
             style={{ borderRadius: 9999, marginTop: 20 }}
+            onClick={() => setOpenModal(true)}
           >
             Get Started
           </Button>
         </div>
       </div>
       {/* Who we are */}
-      <Box textAlign="center" mt={6} mb={6}>
+      <Box textAlign="center" mt={10} mb={10}>
         <Typography variant="h4" fontWeight={700}>
           Who we are
         </Typography>
@@ -84,7 +59,15 @@ const Home = () => {
       </Box>
       {/* End Who we are */}
       {/* Why mircale camp */}
-      <Box sx={{ backgroundColor: "primary.main", padding: 3 }} mt={10}>
+      <Box
+        sx={{
+          backgroundColor: "primary.main",
+          padding: 3,
+          paddingTop: 6,
+          paddingBottom: 6,
+        }}
+        mt={10}
+      >
         <Typography
           variant="h4"
           color="whiteColor"
@@ -245,65 +228,9 @@ const Home = () => {
         </Box>
       </Box>
       {/* Footer */}
-      <Box
-        sx={{ backgroundColor: "primary.main", padding: 10, paddingBottom: 1 }}
-      >
-        <Grid container>
-          <Grid item xs={3}>
-            <Typography
-              fontWeight={600}
-              variant="subtitle1"
-              mb={3}
-              color="secondary.main"
-            >
-              About Miracle Healing Camp
-            </Typography>
-            {aboutMHCItems.map((item) => (
-              <Typography
-                variant="subtitle2"
-                mb={1.5}
-                color="whiteColor"
-                fontWeight={300}
-              >
-                {item.name}
-              </Typography>
-            ))}
-          </Grid>
-          <Grid item xs={3}>
-            <Typography
-              variant="subtitle1"
-              fontWeight={600}
-              mb={3}
-              color="secondary.main"
-            >
-              Services
-            </Typography>
-            {services.map((item) => (
-              <Typography
-                variant="subtitle2"
-                mb={1.5}
-                color="whiteColor"
-                fontWeight={300}
-              >
-                {item.name}
-              </Typography>
-            ))}
-          </Grid>
-        </Grid>
-        <Typography
-          variant="body2"
-          display="block"
-          align="center"
-          mt={8}
-          color="whiteColor"
-          fontWeight={700}
-          gutterBottom
-        >
-          © 2023 MiracleHealingCamp, Inc. All Rights Reserved
-        </Typography>
-      </Box>
+      <Footer />
     </div>
   );
 };
 
-export default Home;
+export default LandingPage;
