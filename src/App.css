@@ -28,3 +28,15 @@
   border-radius: 10px;
   background-color: #cfcfcf;
 }
+.datepicker-appointment {
+  width: 100%;
+  padding: 8.5px 14px;
+  /* height: 1.4375em; */
+  border-radius: 5px;
+  border: 1px solid rgb(118, 118, 118);
+  margin-bottom: 10px;
+}
+.css-1h8j2lx-MuiPaper-root-MuiDialog-paper {
+  border: 3px solid #4b4d99;
+  border-radius: 6px;
+}

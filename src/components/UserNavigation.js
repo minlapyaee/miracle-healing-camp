@@ -1,4 +1,4 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import PropTypes from "prop-types";
 import Box from "@mui/material/Box";
 import CssBaseline from "@mui/material/CssBaseline";
@@ -18,13 +18,15 @@ import { Button } from "@mui/material";
 import LogoutIcon from "@mui/icons-material/Logout";
 import { UserContext } from "../context/userContext";
 import { useNavigate } from "react-router-dom";
+import { useLocation } from "react-router-dom";
 
 const drawerWidth = 240;
 
 function UserNavigation(props) {
+  const location = useLocation();
   const { setUser } = useContext(UserContext);
   const [mobileOpen, setMobileOpen] = useState(false);
-  const [selectedItem, setSelectedItem] = useState("Home");
+  const [selectedItem, setSelectedItem] = useState(location.pathname);
   const navigate = useNavigate();
 
   const { window } = props;
@@ -33,8 +35,12 @@ function UserNavigation(props) {
     setMobileOpen(!mobileOpen);
   };
 
+  useEffect(() => {
+    setSelectedItem(location.pathname);
+  }, []);
+
+  console.log("=? ", location);
   const handleLogout = () => {
-    console.log("clicked");
     localStorage.removeItem("rftoken_id");
     navigate("/");
     setUser({});
@@ -77,15 +83,15 @@ function UserNavigation(props) {
         <List sx={{ paddingLeft: 2, paddingRight: 2 }}>
           {navItems.map((item) => (
             <ListItem
-              key={item.name}
+              key={item.url}
               disablePadding
               sx={{
                 display: "block",
                 background:
-                  selectedItem === item.name && "rgba(54, 182, 249, 0.2)",
-                borderRadius: selectedItem === item.name && 99999,
+                  selectedItem === item.url && "rgba(54, 182, 249, 0.2)",
+                borderRadius: selectedItem === item.url && 99999,
               }}
-              onClick={() => setSelectedItem(item.name)}
+              onClick={() => setSelectedItem(item.url)}
             >
               <Link
                 key={item.name}
@@ -169,15 +175,26 @@ function UserNavigation(props) {
           {drawer}
         </Drawer>
       </Box>
+      {location.pathname === "/make-an-appointment" && (
+        <Box
+          sx={{
+            backgroundColor: "primary.secondary",
+            position: "absolute",
+            width: "100%",
+            height: "50%",
+          }}
+        ></Box>
+      )}
+
       <Box
         component="main"
-        sx={{ width: "100%", minHeight: "100vh", background: "#F5F5FF" }}
+        sx={{ width: "100%", minHeight: "100vh", background: "#F7F7F7" }}
       >
         <Box
           sx={{
             flexGrow: 1,
             p: 3,
-            maxWidth: 850,
+            maxWidth: location.pathname === "/make-an-appointment" ? 1200 : 850,
             marginLeft: "auto",
             marginRight: "auto",
           }}

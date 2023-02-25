@@ -215,6 +215,7 @@ function Navigation(props) {
           {drawer}
         </Drawer>
       </Box>
+
       <Box>{props.children}</Box>
     </div>
   );
