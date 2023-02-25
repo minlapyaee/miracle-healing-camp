@@ -104,5 +104,5 @@
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
 
-[contributors-shield]: https://img.shields.io/badge/Contributor-0-green
+[contributors-shield]: https://img.shields.io/badge/Contributor-0-green?style=for-the-badge
 [contributors-url]: https://github.com/minlapyaee/miracle-healing-camp/graphs/contributors
