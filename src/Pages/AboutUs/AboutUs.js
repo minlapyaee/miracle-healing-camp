@@ -13,7 +13,7 @@ const AboutUs = () => {
     <div>
       <Box
         sx={{
-          backgroundColor: "#404181",
+          background: "linear-gradient(180deg, rgba(75,77,173,1) 0%, rgba(73,139,193,1) 50%, rgba(255,255,255,1) 100%)",
           height: "100vh",
           display: "flex",
           justifyContent: "center",

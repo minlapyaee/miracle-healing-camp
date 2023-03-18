@@ -12,11 +12,25 @@
 }
 .landing_page_text_container {
   /* margin-left: 10vw; */
+  width: 100%;
   text-align: center;
 }
 .landing_page_text_container h1 {
   font-size: 2vw;
 }
-.landing_page_text_container h1 span {
-  /* color: #36B6F9; */
+.stepper {
+}
+.stepper .MuiStepLabel-iconContainer {
+  border: 1px solid #4B4D99;
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+}
+.stepper .MuiStepLabel-iconContainer svg {
+  fill: #4B4D99;
+  scale: 1.2;
 }

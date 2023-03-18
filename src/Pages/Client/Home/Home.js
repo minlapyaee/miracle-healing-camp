@@ -1,432 +1,286 @@
+import React, { useContext, useState } from "react";
 import {
-  Avatar,
   Box,
   Button,
-  Card,
-  Chip,
-  CircularProgress,
-  Dialog,
-  DialogActions,
-  DialogContent,
-  DialogTitle,
   Grid,
   Paper,
-  Skeleton,
-  TextField,
+  Step,
+  StepButton,
+  StepLabel,
+  Stepper,
   Typography,
 } from "@mui/material";
-import React, { useContext, useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
-import RichTextEditor from "react-rte";
-import HelpCenterIcon from "@mui/icons-material/HelpCenter";
-import AutoStoriesIcon from "@mui/icons-material/AutoStories";
-import { makeStyles } from "@mui/styles";
-import api from "../../../config/api";
+import DoctorImage from "../../../assets/doctor.png";
+import MeditatingImage from "../../../assets/meditating.png";
+import AssessmentImage from "../../../assets/assessment.png";
+import CheckMarkImage from "../../../assets/checkmark.png";
+import FamilyImage from "../../../assets/family.png";
+import AuthModal from "../../../components/AuthModal";
+import "./LandingPage.css";
+import Footer from "../../../components/Footer";
 import { UserContext } from "../../../context/userContext";
-import { motion } from "framer-motion";
-import RenderPost from "../../../components/RenderPost";
 
-const toolbarConfig = {
-  // Optionally specify the groups to display (displayed in the order listed).
-  display: [
-    "INLINE_STYLE_BUTTONS",
-    "BLOCK_TYPE_BUTTONS",
-    "LINK_BUTTONS",
-    "BLOCK_TYPE_DROPDOWN",
-    "HISTORY_BUTTONS",
-  ],
-  INLINE_STYLE_BUTTONS: [
-    { label: "Bold", style: "BOLD", className: "custom-css-class" },
-    { label: "Italic", style: "ITALIC" },
-    { label: "Underline", style: "UNDERLINE" },
-  ],
-  BLOCK_TYPE_DROPDOWN: [
-    { label: "Normal", style: "unstyled" },
-    { label: "Heading Small", style: "header-three" },
-  ],
-  BLOCK_TYPE_BUTTONS: [
-    { label: "UL", style: "unordered-list-item" },
-    { label: "OL", style: "ordered-list-item" },
-  ],
-};
-
-const useStyles = makeStyles((theme) => ({
-  helperText: {
-    textAlign: "right",
+const data = [
+  {
+    title: "Choose Date",
   },
-}));
+  {
+    title: "Get Confirmation",
+  },
+  {
+    title: "Join Zoom Meeting Link",
+  },
+  {
+    title: "Done!",
+  },
+];
 
-const Home = (props) => {
+const Home = () => {
   const { user } = useContext(UserContext);
   const [openModal, setOpenModal] = useState(false);
-  const [title, setTitle] = useState("");
-  const [content, setContent] = useState(null);
-  const [postList, setPostList] = useState([]);
-  const [loader, setLoader] = useState(true);
-  const [createPostLoader, setCreatePostLoader] = useState(false);
+  const [currentSteps, setCurrentSteps] = useState(0);
 
-  const [type, setType] = useState("question");
-  const [questionVal, setQuestionVal] = useState("");
-  const navigate = useNavigate();
-  const classes = useStyles();
-
-  const [editorState, setEditorState] = useState(
-    RichTextEditor.createEmptyValue()
-  );
-
-  const handleClose = () => {
-    setOpenModal(false);
-    setType("question");
-    setTitle("");
-    setContent(null);
-    setQuestionVal("");
-    setEditorState(RichTextEditor.createEmptyValue());
-  };
-
-  const onChangeEditorState = (val) => {
-    let str = val.toString("html");
-    setContent(str);
-    setEditorState(val);
-  };
-
-  const fetchPosts = (showLoader = true) => {
-    setLoader(showLoader);
-    api
-      .get(
-        "/client/fetch_post",
-        {},
-        {
-          accessToken: user.accessToken,
-          rftoken_id: localStorage.getItem("rftoken_id"),
-        }
-      )
-      .then((res) => {
-        setLoader(false);
-        if (res.success) {
-          setPostList(res.data);
-        }
-      })
-      .catch((err) => console.log(err));
-  };
-
-  useEffect(() => {
-    fetchPosts();
-  }, []);
-
-  const handleSubmit = () => {
-    setCreatePostLoader(true);
-    let data = {};
-    if (type === "question") {
-      data = {
-        title: questionVal,
-        type: "Question",
-      };
-    } else {
-      data = {
-        title,
-        content: content,
-        type: "Story",
-      };
-    }
-
-    api
-      .post("/client/create_post", JSON.stringify(data), {
-        accessToken: user.accessToken,
-        rftoken_id: localStorage.getItem("rftoken_id"),
-      })
-      .then((res) => {
-        setCreatePostLoader(false);
-        fetchPosts(false);
-        handleClose();
-      })
-      .catch((err) => {
-        console.log("errr", err);
-      });
-  };
-
-  const createLike = (post_id, post_owner_id) => {
-    // const clonePostList = [...postList];
-
-    // clonePostList.map((post) => {
-    //   const findIndex = post.likes.findIndex(
-    //     (like) => like.created_by === user.user._id
-    //   );
-    //   if (findIndex === -1) {
-    //     return post.likes.push({
-    //       created_by: user.user._id,
-    //     });
-    //   } else {
-    //     return post.likes.splice(post.likes.indexOf(findIndex), 1);
-    //   }
-    // });
-
-    // setPostList(clonePostList);
-
-    api
-      .post("/client/create_like", JSON.stringify({ post_id, post_owner_id }), {
-        accessToken: user.accessToken,
-        rftoken_id: localStorage.getItem("rftoken_id"),
-      })
-      .then((res) => {
-        fetchPosts(false);
-      })
-      .catch((err) => {
-        console.log("errr", err);
-      });
-  };
-
-  const createContentModal = () => {
-    return (
-      <Dialog
-        open={openModal}
-        onClose={handleClose}
-        PaperProps={{
-          sx: {
-            width: "100%",
-            maxWidth: "600px!important",
-            height: "500px",
-            overflowY: "auto",
-          },
-        }}
-      >
-        <DialogTitle>
-          {" "}
-          <Grid container>
-            <Grid
-              item
-              xs={6}
-              align="center"
-              sx={{
-                color: "#6C6C6C",
-                display: "flex",
-                justifyContent: "center",
-                padding: 1,
-                "&:hover": { backgroundColor: "#F4F4F4" },
-                backgroundColor:
-                  type === "question" && "rgba(54, 182, 249, 0.2)",
-                fontSize: 14,
-              }}
-              onClick={() => {
-                setType("question");
-                setTitle("");
-                setContent(null);
-                setQuestionVal("");
-                setEditorState(RichTextEditor.createEmptyValue());
-              }}
-            >
-              <HelpCenterIcon fontSize="small" sx={{ marginRight: 1 }} />
-              Ask
-            </Grid>
-            <Grid
-              item
-              xs={6}
-              align="center"
-              sx={{
-                color: "#6C6C6C",
-                display: "flex",
-                justifyContent: "center",
-                padding: 1,
-                "&:hover": { backgroundColor: "#F4F4F4" },
-                backgroundColor: type === "story" && "rgba(54, 182, 249, 0.2)",
-                fontSize: 14,
-              }}
-              onClick={() => {
-                setType("story");
-                setTitle("");
-                setContent(null);
-                setQuestionVal("");
-                setEditorState(RichTextEditor.createEmptyValue());
-              }}
-            >
-              <AutoStoriesIcon fontSize="small" sx={{ marginRight: 1 }} />
-              Story
-            </Grid>
-          </Grid>
-        </DialogTitle>
-        <DialogContent>
-          {type === "question" ? (
-            <TextField
-              placeholder="What are you thoughts?"
-              fullWidth
-              multiline
-              sx={{
-                border: "none",
-                "& fieldset": { border: "none" },
-                ".MuiInputBase-input": {
-                  fontSize: 13,
-                },
-              }}
-              onChange={(e) => setQuestionVal(e.target.value)}
-              value={questionVal}
-            />
-          ) : (
-            <>
-              <TextField
-                placeholder="title"
-                size="small"
-                fullWidth
-                sx={{ marginBottom: 2 }}
-                FormHelperTextProps={{
-                  className: classes.helperText,
-                }}
-                inputProps={{
-                  maxLength: 100,
-                }}
-                helperText={`${title.length} / 100 `}
-                onChange={(e) => setTitle(e.target.value)}
-              />
-              <RichTextEditor
-                value={editorState}
-                onChange={onChangeEditorState}
-                style={{ height: 600 }}
-                id="answer-text-editor"
-                toolbarConfig={toolbarConfig}
-              />
-            </>
-          )}
-        </DialogContent>
-        <DialogActions>
-          <Button sx={{ marginRight: 3 }}>
-            {" "}
-            <Typography
-              sx={{ fontSize: 14, textTransform: "initial" }}
-              variant="caption"
-              onClick={handleClose}
-            >
-              Cancel
-            </Typography>
-          </Button>
-          {/* createPostLoader */}
-          {createPostLoader ? (
-            <Box display="flex">
-              <CircularProgress size={24} />
-            </Box>
-          ) : (
-            <Button
-              size="medium"
-              variant="contained"
-              sx={{ borderRadius: 999 }}
-              onClick={handleSubmit}
-            >
-              <Typography
-                sx={{ fontSize: 14, textTransform: "initial" }}
-                variant="caption"
-              >
-                Respond
-              </Typography>
-            </Button>
-          )}
-        </DialogActions>
-      </Dialog>
-    );
-  };
-
-  if (loader) {
-    return (
-      <div>
-        <Skeleton variant="rectangular" fullWidth height={130} />;
-        <Skeleton variant="rectangular" fullWidth mt={2} height={300} />;
-        <Skeleton variant="rectangular" fullWidth mt={2} height={300} />;
-      </div>
-    );
-  }
+  const handleCloseModal = () => setOpenModal(false);
   return (
-    <Box>
-      {createContentModal()}
-      <Paper
-        sx={{
-          minHeight: 130,
-          padding: 2,
-          display: "flex",
-          flexDirection: "column",
-          justifyContent: "space-between",
-          borderRadius: 2,
-        }}
-      >
-        <Box display="flex" justifyContent="flex-start" alignItems="center">
-          <Avatar sx={{ marginRight: 2 }}>N</Avatar>
-          <Box
-            sx={{
-              backgroundColor: "#F4F4F4",
-              borderRadius: 99999,
-              flex: 1,
-              padding: 1,
-              paddingLeft: 3,
-            }}
+    <div className="landing_page_container">
+      <AuthModal openModal={openModal} handleCloseModal={handleCloseModal} />
+      <div className="landing_page">
+        <div className="landing_page_text_container">
+          <Typography variant="h1" fontWeight={700} color="white" mb={2}>
+            Welcome, {user.user.fullname}
+          </Typography>
+          <Typography
+            textTransform="uppercase"
+            fontWeight="bold"
+            variant="body2"
+          >
+            We are here to help you every time, everywhere you need.
+          </Typography>
+          <Button
+            variant="contained"
+            color="secondary"
+            size="large"
+            style={{ borderRadius: 9999, marginTop: 20 }}
             onClick={() => setOpenModal(true)}
           >
-            <Typography sx={{ color: "#9F9F9F", fontSize: 14 }}>
-              What do you want to ask or share?
+            Sign up for free
+          </Button>
+        </div>
+        <div>
+          <img src={MeditatingImage} alt="Meditating" />
+        </div>
+      </div>
+      {/* Your Health is our Priority */}
+      <Box>
+        <Typography
+          variant="h4"
+          color="darkColor"
+          fontWeight={700}
+          align="center"
+        >
+          Booking Appointment Steps
+        </Typography>
+        <Box width={1100} margin="auto" mt={6} mb={10}>
+          <Stepper alternativeLabel activeStep={-1} disabled={false}>
+            {data.map((label, index) => (
+              <Step key={label} className="stepper">
+                <StepButton onClick={() => setCurrentSteps(index)}>
+                  <Typography variant="div">{label.title}</Typography>
+                </StepButton>
+              </Step>
+            ))}
+          </Stepper>
+        </Box>
+      </Box>
+      {/* End Your Health is our Priority */}
+      {/* Services for packages */}
+      <Box
+        sx={{
+          backgroundColor: "white",
+          padding: 3,
+          paddingBottom: 6,
+        }}
+      >
+        <Typography
+          variant="h4"
+          color="darkColor"
+          fontWeight={700}
+          align="center"
+        >
+          Services for packages
+        </Typography>
+        <Box display="flex" justifyContent="center" alignItems="center">
+          <Box
+            align="center"
+            sx={{
+              padding: 5,
+              background: "#4B4D99",
+              width: 250,
+              borderRadius: 8,
+            }}
+            mt={5}
+          >
+            <Typography variant="h6" fontWeight={700} mb={3} color="white">
+              Basic Package
             </Typography>
+            <Typography variant="overline" color="white">
+              This package include:
+            </Typography>
+
+            <ul
+              style={{
+                color: "#fff",
+                marginTop: 30,
+              }}
+            >
+              <li
+                style={{
+                  background: `url(${CheckMarkImage}) no-repeat left center`,
+                  padding: "5px 10px 5px 25px",
+                  listStyle: "none",
+                  margin: "10px 0px",
+                  verticalAlign: "middle",
+                }}
+              >
+                1 counselling
+              </li>
+              <li
+                style={{
+                  background: `url(${CheckMarkImage}) no-repeat left center`,
+                  padding: "5px 10px 5px 25px",
+                  listStyle: "none",
+                  margin: "10px 0px",
+                  verticalAlign: "middle",
+                }}
+              >
+                Free assesment
+              </li>
+              <li
+                style={{
+                  background: `url(${CheckMarkImage}) no-repeat left center`,
+                  padding: "5px 10px 5px 25px",
+                  listStyle: "none",
+                  margin: "10px 0px",
+                  verticalAlign: "middle",
+                }}
+              >
+                Join community
+              </li>
+            </ul>
+            <Button
+              variant="contained"
+              color="secondary"
+              size="large"
+              style={{ borderRadius: 9999, marginTop: 20 }}
+              onClick={() => setOpenModal(true)}
+            >
+              50,000 mmk
+            </Button>
           </Box>
         </Box>
-        <Grid container>
-          <Grid
-            item
-            xs={6}
-            align="center"
-            sx={{
-              color: "#6C6C6C",
-              display: "flex",
-              justifyContent: "center",
-              padding: 1,
-              "&:hover": { backgroundColor: "#F4F4F4" },
-              fontSize: 14,
-            }}
-            onClick={() => {
-              setType("question");
-              setOpenModal(true);
-              setTitle("");
-              setContent(null);
-              setQuestionVal("");
-              setEditorState(RichTextEditor.createEmptyValue());
-            }}
-          >
-            <HelpCenterIcon fontSize="small" sx={{ marginRight: 1 }} />
-            Ask
+      </Box>
+      {/* End Services for packages */}
+      {/* Self Assessment */}
+      <Box
+        sx={{
+          backgroundColor: "primary.main",
+          padding: 3,
+          paddingTop: 6,
+          paddingBottom: 6,
+        }}
+        mt={10}
+      >
+        <Typography
+          variant="h4"
+          color="whiteColor"
+          fontWeight={700}
+          align="center"
+        >
+          What you are struggling with? Take Free Quizzes to know!
+        </Typography>
+        <Grid container columnSpacing={3} rowSpacing={3} mt={5} px={15}>
+          <Grid item xs={12} md={6} lg={4}>
+            <Paper align="center" sx={{ height: 250, paddingBottom: 2 }}>
+              <Box
+                sx={{
+                  background: `url(${AssessmentImage})`,
+                  width: "100%",
+                  height: "200px",
+                  backgroundSize: "contain",
+                  backgroundRepeat: "no-repeat",
+                }}
+              ></Box>
+              {/* <img src={AssessmentImage} alt="assesment" /> */}
+              <Typography variant="body2" fontWeight={700} mt={1} mb={3}>
+                Depression Test (Self-Assessment)
+              </Typography>
+            </Paper>
           </Grid>
-          <Grid
-            item
-            xs={6}
-            align="center"
-            sx={{
-              color: "#6C6C6C",
-              display: "flex",
-              justifyContent: "center",
-              padding: 1,
-              "&:hover": { backgroundColor: "#F4F4F4" },
-              fontSize: 14,
-            }}
-            onClick={() => {
-              setType("story");
-              setOpenModal(true);
-              setTitle("");
-              setContent(null);
-              setQuestionVal("");
-              setEditorState(RichTextEditor.createEmptyValue());
-            }}
-          >
-            <AutoStoriesIcon fontSize="small" sx={{ marginRight: 1 }} />
-            Story
+          <Grid item xs={12} md={6} lg={4}>
+            <Paper align="center" sx={{ height: 250, paddingBottom: 2 }}>
+              <Box
+                sx={{
+                  background: `url(${AssessmentImage})`,
+                  width: "100%",
+                  height: "200px",
+                  backgroundSize: "contain",
+                  backgroundRepeat: "no-repeat",
+                }}
+              ></Box>
+              {/* <img src={AssessmentImage} alt="assesment" /> */}
+              <Typography variant="body2" fontWeight={700} mt={1} mb={3}>
+                Depression Test (Self-Assessment)
+              </Typography>
+            </Paper>
+          </Grid>
+          <Grid item xs={12} md={6} lg={4}>
+            <Paper align="center" sx={{ height: 250, paddingBottom: 2 }}>
+              <Box
+                sx={{
+                  background: `url(${AssessmentImage})`,
+                  width: "100%",
+                  height: "200px",
+                  backgroundSize: "contain",
+                  backgroundRepeat: "no-repeat",
+                }}
+              ></Box>
+              {/* <img src={AssessmentImage} alt="assesment" /> */}
+              <Typography variant="body2" fontWeight={700} mt={1} mb={3}>
+                Depression Test (Self-Assessment)
+              </Typography>
+            </Paper>
           </Grid>
         </Grid>
-      </Paper>
+      </Box>
+      {/* Self Assessment */}
 
-      {/* Posts */}
-      {postList.map((data) => {
-        const post = data.post;
-        return (
-          <motion.div
-            key={post._id}
-            layout
-            style={{ cursor: "pointer" }}
-            onClick={() => navigate(`/detail-post/${post.title}`)}
-          >
-            <RenderPost post={post} data={data} createLike={createLike} />
-          </motion.div>
-        );
-      })}
-    </Box>
+      <Box
+        sx={{
+          backgroundColor: "white",
+          paddingBottom: 6,
+        }}
+        px={15}
+      >
+        <Grid container alignItems="center">
+          <Grid item md={6} sm={12}>
+            <Typography variant="h5" fontWeight="bold">
+              Need help for someone you care about?
+            </Typography>
+            <Typography variant="body2" mt={3}>
+              We know how hard it is to watch someone you care about struggling.
+              Finding the right care is the first step. If you want guidance on
+              the best mental health support for yourself or a loved one a
+              Miracle Healing Camp can help you.
+            </Typography>
+          </Grid>
+          <Grid item md={6} sm={12} display="flex" justifyContent="center">
+            <img src={FamilyImage} alt="family" height={400} />
+          </Grid>
+        </Grid>
+      </Box>
+      {/* Footer */}
+      <Footer />
+    </div>
   );
 };
 

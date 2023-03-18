@@ -24,23 +24,17 @@ import AuthModal from "./AuthModal";
 const navItems = [
   {
     name: "Home",
+    url: "/",
   },
-  {
-    name: "Blogs",
-    url: "",
+    {
+    name: "About Us",
+    url: "about-us",
   },
   {
     name: "Services",
     url: "",
   },
-  {
-    name: "About Us",
-    url: "about-us",
-  },
-  {
-    name: "Contact Us",
-    url: "",
-  },
+
   {
     name: "Get Started",
     url: "",
@@ -97,7 +91,7 @@ function Navigation(props) {
           paddingLeft: { xs: "24px" },
           paddingTop: { xs: "11px" },
           paddingBottom: { xs: "13px" },
-          boxShadow: 1,
+          // boxShadow: 1,
         }}
       >
         <Box

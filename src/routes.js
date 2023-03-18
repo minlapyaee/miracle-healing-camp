@@ -3,8 +3,9 @@ import LandingPage from "./Pages/LandingPage/LandingPage";
 
 // Client Pages
 import Book from "./Pages/Client/Book/Book";
+import Blog from "./Pages/Client/Blog/Blog";
+import DetailPost from "./Pages/Client/Blog/DetailPost";
 import Home from "./Pages/Client/Home/Home";
-import DetailPost from "./Pages/Client/Home/DetailPost";
 
 const routes = [
   {
@@ -24,9 +25,15 @@ const routes = [
 const userRoutes = [
   {
     path: "/",
-    key: "HOME",
+    key: "Home",
     exact: "true",
     component: Home,
+  },
+  {
+    path: "/blog",
+    key: "Blog",
+    exact: "true",
+    component: Blog,
   },
   {
     path: "/make-an-appointment",

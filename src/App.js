@@ -8,8 +8,10 @@ import "./App.css";
 import UserNavigation from "./components/UserNavigation";
 import { UserContext } from "./context/userContext";
 import api from "./config/api";
+import NotFoundPage from "./NotFoundPage";
 
 function App() {
+  const [loading, setLoading]= useState(true)
   const [user, setUser] = useState({});
 
   const fetchUserInfo = () => {
@@ -20,6 +22,7 @@ function App() {
         { rftoken_id: localStorage.getItem("rftoken_id") }
       )
       .then((result) => {
+        setLoading(false)
         setUser(result);
       })
       .catch((err) => {
@@ -37,9 +40,13 @@ function App() {
     fetchUserInfo();
   }, []);
 
+  if(loading) {
+    return <div>Loading</div>
+  }
   return (
     <ThemeProvider theme={theme}>
       <UserContext.Provider value={{ user, setUser }}>
+  
         {user?.accessToken ? (
           <UserNavigation>
             <Routes>
@@ -51,6 +58,7 @@ function App() {
                   element={<route.component {...route} />}
                 />
               ))}
+            <Route path="*" element={<NotFoundPage />} />
             </Routes>
           </UserNavigation>
         ) : (
@@ -64,6 +72,7 @@ function App() {
                   element={<route.component {...route} />}
                 />
               ))}
+            <Route path="*" element={<NotFoundPage />} />
             </Routes>
           </Navigation>
         )}

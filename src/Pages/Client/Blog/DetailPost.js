@@ -315,8 +315,7 @@ const DetailPost = () => {
 
   if (post) {
     return (
-      <Box sx={{ marginTop: 6 }}>
-        Hello
+      <Box sx={{ marginTop: 15 }}>
         {showCommentBox && CommentView()}
         <Card sx={{ padding: 2 }}>
           <Box display="flex" alignItems="center">
