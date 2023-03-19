@@ -4,8 +4,12 @@ import LandingPage from "./Pages/LandingPage/LandingPage";
 // Client Pages
 import Book from "./Pages/Client/Book/Book";
 import Blog from "./Pages/Client/Blog/Blog";
+import MainBlog from "./Pages/MainBlog/MainBlog";
 import DetailPost from "./Pages/Client/Blog/DetailPost";
 import Home from "./Pages/Client/Home/Home";
+import Services from "./Pages/Services/Services";
+import Booking from "./Pages/Booking/Booking";
+import QA from "./Pages/QA/QA";
 
 const routes = [
   {
@@ -19,6 +23,24 @@ const routes = [
     key: "ABOUT_US",
     exact: true,
     component: AboutUs,
+  },
+  {
+    path: "/services",
+    key: "SERVICES",
+    exact: true,
+    component: Services,
+  },
+  {
+    path: "/qa",
+    key: "QA",
+    exact: true,
+    component: QA,
+  },
+  {
+    path: "/blog",
+    key: "BLOG",
+    exact: true,
+    component: Blog,
   },
 ];
 
@@ -37,15 +59,33 @@ const userRoutes = [
   },
   {
     path: "/make-an-appointment",
-    key: "BOOK",
+    key: "Booking",
     exact: "true",
-    component: Book,
+    component: Booking,
   },
   {
     path: "/detail-post/:id",
     key: "DETAIL_POST",
     exact: "true",
     component: DetailPost,
+  },
+  {
+    path: "/qa",
+    key: "QA",
+    exact: true,
+    component: QA,
+  },
+  {
+    path: "/services",
+    key: "SERVICES",
+    exact: true,
+    component: Services,
+  },
+  {
+    path: "/main-blog",
+    key: "Main_Blog",
+    exact: true,
+    component: MainBlog,
   },
 ];
 

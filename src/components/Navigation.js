@@ -32,7 +32,7 @@ const navItems = [
   },
   {
     name: "Services",
-    url: "",
+    url: "services",
   },
 
   {

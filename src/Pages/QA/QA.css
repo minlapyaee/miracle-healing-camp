@@ -1,0 +1,69 @@
+.divQA {
+    margin-top: 60px;
+}
+.divQA1{
+    background: linear-gradient(180deg, #4B4D99 0%, #759BE5 64.54%, rgba(253, 253, 253, 0.29) 98.4%);
+    color: white;
+    padding: 0px 0px 50px 20px;
+}
+.spn1QA1 h1{
+    background-color: transparent;
+}
+.divQA2,
+.divQA3{
+    padding: 0% 5%;
+}
+.divQA2 fieldset {
+    margin-top: 60px;
+    border: none;
+}
+.divQA2 input[type="radio"] {
+    display: none;
+}
+.divQA2 input[type="radio"]:checked + label{
+    background-color: #B6CAF1;
+}
+.divQA2 label {
+    border: 3px solid #B6CAF1;
+    border-radius: 30px;
+    padding: 10px;
+    margin: 10px;
+    line-height: 70px;
+}
+.divQA2 button{
+    background-color: #F9C937;
+    color: #000;
+    margin: 10px 0px;
+    padding: 10px 30px;
+    border-radius: 30px;
+}
+.spn2QA3{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.divQA3 {
+    background-color: #4B4D99;
+    margin: 5%;
+    color: white;
+    border-radius: 30px;
+    padding: 30px;
+}
+.divQA4 {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.divQA4 ul{
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    list-style: none;
+    grid-gap: 10px;
+}
+.divQA4 li{
+    border-radius: 30px;
+    background-color: #4B4D99;
+    padding: 30px 10px;
+    color: white;
+}
