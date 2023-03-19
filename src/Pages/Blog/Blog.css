@@ -1,0 +1,138 @@
+.divBlog{
+    margin-top: 60px;
+}
+.divBlog1{
+    background: linear-gradient(180deg, rgba(75,77,173,1) 0%, rgba(73,139,193,1) 50%, rgba(255,255,255,1) 100%);
+    color: white;
+    display: flex;
+    justify-content: center;
+    align-items: flex;
+    min-height: 100vh;
+}
+.spn1Blog1,
+.spn2Blog1{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 50%;
+}
+.spn1Blog1 h1{
+    max-width: 15ch;
+}
+.spn2Blog1 {
+    width: 50%;
+}
+.spn2Blog1 img {
+    width: 480px;
+}
+
+.spn1Blog2 {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.spn1Blog2 h1{
+    background-color: #4B4D99;
+    color: white;
+    padding: 20px;
+    border-radius: 30px;
+}
+.spn2Blog2 {
+    display: flex;
+    justify-content: center;
+    align-items: center;;
+}
+.spn2Blog2 fieldset{
+    padding: 40px;
+    text-align: center;
+    background: linear-gradient(180deg, rgba(75, 77, 153, 0.8) 25.93%, rgba(94, 156, 229, 0.8) 163.22%, rgba(158, 99, 193, 0.4) 194.99%);
+    border-radius: 20px;
+    border: 0px;
+    color: white;
+}
+.spn2Blog2 fieldset legend{
+    transform: translateY(-50px);
+    color: black;
+}
+.spn2Blog2 button{
+    background-color: #F9C937;
+    color: #000;
+    margin: 10px 0px;
+    padding: 10px 30px;
+    border-radius: 30px;
+}
+.spn2Blog2 fieldset ul{
+    text-align: left;
+}
+
+
+.divBlog3,
+.divBlog4,
+.divBlog5{
+    padding: 5%;
+}
+.spn1Blog3 {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.spn1Blog3 fieldset,
+.spn1Blog4 fieldset{
+    background-color: #4B4D99;
+    margin: 30px;
+    padding: 30px;
+    border: none;
+}
+.spn1Blog4 fieldset{
+    background-color: #E7EBFF;
+    border-radius: 30px;
+}
+.spn1Blog3 p,
+.spn1Blog4 p{
+    background-color: white;
+    padding: 15px;
+    border-radius: 30px;
+}
+.spn1Blog4 p {
+    background-color: transparent;
+}
+.spn1Blog3 button,
+.spn1Blog4 button{
+    background-color: transparent;
+    border: none;
+    margin: 10px 10px;
+}
+.spn1Blog3 img,
+.spn1Blog4 img{
+    background-color: white;
+    border-radius: 50%;
+    padding: 5px;
+    width: 24px;
+    height: 24px;
+    margin-right: 15px;
+}
+
+.spn2Blog4 {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.spn2Blog4 button{
+    background-color: #F9C937;
+    color: #000;
+    margin: 10px 0px;
+    padding: 10px 30px;
+    border-radius: 30px;
+}
+
+
+.divBlog5 button {
+    background-color: #4B4D99;
+    padding: 10px 30px;
+    border: none;
+    border-radius: 30px;
+    margin: 10px;
+    color: white;
+}

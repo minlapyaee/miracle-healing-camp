@@ -1,0 +1,87 @@
+.divBooking {
+    margin-top: 60px;
+}
+.divBooking1 {
+    margin: 5%;
+    background-color: #4B4D99;
+    color: white;
+    border-radius: 30px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.divBooking1 img{
+    width: 320px;
+}
+.divBooking2 {
+    margin: 5%;
+}
+.divBooking3,
+.divBooking4,
+.divBooking3 form,
+.divBooking4 form{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.divBooking3 form,
+.divBooking4 form{
+    flex-direction: column;
+    padding: 30px;
+    background: linear-gradient(180deg, #4B4D99 0%, #4B70B5 61.19%, rgba(183, 84, 229, 0.38) 125.08%);
+    color: white;
+    border-radius: 30px;
+}
+.divBooking3 form .fstForm1,
+.divBooking4 form .fstForm1{
+    width: 100%;
+    border: none;
+    display: flex;
+    justify-content: space-around;
+    align-self: center;
+}
+.divBooking3 form .fstForm2{
+    width: 100%;
+    border: none;
+    margin-top: 10px;
+}
+.divBooking3 form .fstForm2 legend{
+    margin: 10px 0px;
+    border: none;
+}
+.divBooking3 form input:not(input[type="radio"]),
+.divBooking4 form input:not(input[type="radio"]),
+.divBooking3 form select,
+.divBooking4 form select,
+.divBooking4 form textarea{
+    width: 100%;
+    border: none;
+    padding: 10px;
+    margin: 15px 0px;
+    border-radius: 30px;
+}
+.divBooking3 input[type="radio"] {
+    display: none;
+    margin-top: 30px;
+}
+.divBooking3 input[type="radio"]:checked + label{
+    background-color: white;
+    color: black;
+}
+
+.divBooking3 label {
+    border: 3px solid white;
+    border-radius: 30px;
+    width: fit-content;
+    padding: 5px 10px;
+    margin: 0px 5px;
+}
+
+
+.divBooking3 button,
+.divBooking4 button{
+    padding: 10px 100px;
+    border-radius: 30px;
+    border: none;
+    margin: 30px;
+}
