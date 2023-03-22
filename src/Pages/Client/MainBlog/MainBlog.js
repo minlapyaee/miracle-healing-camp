@@ -1,10 +1,10 @@
 import React from "react";
-import OnlineMeeting from "../../assets/blog/OnlineMeeting.png";
-import Signing from "../../assets/blog/Signing.png";
-import Profile from "../../assets/blog/profile.png"
+import OnlineMeeting from "../../../assets/blog/OnlineMeeting.png";
+import Signing from "../../../assets/blog/Signing.png";
+import Profile from "../../../assets/blog/profile.png"
 
 import "./MainBlog.css";
-import Footer from "../../components/Footer";
+import Footer from "../../../components/Footer";
 
 const MainBlog = () => {
     return(

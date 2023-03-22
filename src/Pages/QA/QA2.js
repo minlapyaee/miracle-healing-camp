@@ -1,57 +1,58 @@
 import React, { useEffect, useState } from "react";
 import "./QA.css";
 import Givingletter from "../../assets/QA/givingletter.png";
-import { Link, } from "@mui/material";
+import { Link } from "@mui/material";
 
 const questions = [
   {
-    title: "1. Little interest or pleasure in doing things",
+    title: "1. Do you worry about lots of different things?",
     name: "one",
   },
   {
-    title: "2. Feeling down, depressed, or hopeless",
+    title: "2. Do you have trouble controlling your worries?",
     name: "two",
   },
   {
-    title: "3. Trouble falling or staying asleep, or sleeping too much",
+    title: "3. Do you get irritable and/or easily annoyed when anxious?",
     name: "three",
   },
   {
-    title: "4. Feeling tired or having little energy",
+    title: "4. Does worry or anxiety make you feel fatigued or worn out?",
     name: "four",
   },
   {
-    title: "5. Poor appetite or overeating",
+    title:
+      "5.Does worry or anxiety interfere with falling and/or staying asleep?",
     name: "five",
   },
   {
-    title:
-      "6. Feeling bad about yourself - or that you are a failure or have let yourself or your family down",
+    title: "6. Does worry or anxiety make it hard to concentrate?",
     name: "six",
   },
   {
-    title:
-      "7. Trouble concentrating on things, such as reading the newspaper or watching television",
+    title: "7. 7.Do you feel jumpy?",
     name: "seven",
   },
   {
-    title:
-      "8. Moving or speaking so slowly that other people could have noticed or the opposite - being so fidgety or restless that you have been moving around a lot more than usual",
+    title: "8. Do you worry about how well you do things?",
     name: "eight",
   },
   {
-    title:
-      "9. Thoughts that you would be better off dead, or of hurting yourself",
+    title: "9.Do you worry about things working out in the future?",
     name: "nine",
   },
   {
     title:
-      "10. If you checked off any problems, how difficult have these problems made it for you at work, home, or with other people?",
+      "10.Do you worry about things that have already happened in the past?",
     name: "ten",
+  },
+  {
+    title: "11. Do your muscles get tense when you are worried or anxious?",
+    name: "eleven",
   },
 ];
 
-const QA = () => {
+const QA2 = () => {
   const [values, setValues] = useState({
     one: 0.25,
     two: 0.25,
@@ -63,6 +64,7 @@ const QA = () => {
     eight: 0.25,
     nine: 0.25,
     ten: 0.25,
+    eleven: 0.25,
   });
   const [result, setResult] = useState({
     score: 0,
@@ -83,19 +85,20 @@ const QA = () => {
 
   const reTakeRest = () => {
     setValues({
-        one: 0.25,
-    two: 0.25,
-    three: 0.25,
-    four: 0.25,
-    five: 0.25,
-    six: 0.25,
-    seven: 0.25,
-    eight: 0.25,
-    nine: 0.25,
-    ten: 0.25,  
-    })
-    setIsDoneTest(false)
-  }
+      one: 0.25,
+      two: 0.25,
+      three: 0.25,
+      four: 0.25,
+      five: 0.25,
+      six: 0.25,
+      seven: 0.25,
+      eight: 0.25,
+      nine: 0.25,
+      ten: 0.25,
+      eleven: 0.25,
+    });
+    setIsDoneTest(false);
+  };
 
   const handleSubmit = () => {
     let cloneValue = { ...values };
@@ -135,7 +138,7 @@ const QA = () => {
         <>
           <div className="divQA3" style={{ display: "flex" }}>
             <h1>Depression Test - &nbsp; </h1>
-            <h1 style={{ color: "#FFC926"}}>{result.rank}</h1>
+            <h1 style={{ color: "#FFC926" }}>{result.rank}</h1>
           </div>
           <div className="divQA4">
             <ul>
@@ -145,10 +148,10 @@ const QA = () => {
                   display: "flex",
                   justifyContent: "center",
                   alignItems: "center",
-                  width: 200
+                  width: 200,
                 }}
               >
-                Score: {result.score}/10
+                Score: {result.score}/11
               </li>
               <li
                 className="liemail "
@@ -188,8 +191,7 @@ const QA = () => {
               </li>
             </ul>
             <div style={{ width: 400 }}>
-            <img src={Givingletter} width="100%" height="100%"></img>
-
+              <img src={Givingletter} width="100%" height="100%"></img>
             </div>
           </div>
         </>
@@ -253,4 +255,4 @@ const QA = () => {
   );
 };
 
-export default QA;
+export default QA2;

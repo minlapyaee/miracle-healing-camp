@@ -9,14 +9,18 @@ import CommunityImage from "../../assets/community.png";
 import MeditatingImage from "../../assets/meditating.png";
 import ConsultationImage from "../../assets/consultation.png";
 import AssessmentImage from "../../assets/assessment.png";
+import AnxietyTestImage from "../../assets/anxietytest.png";
+import PtsdTestImage from "../../assets/ptsdtest.png";
 import CheckMarkImage from "../../assets/checkmark.png";
 import FamilyImage from "../../assets/family.png";
 import AuthModal from "../../components/AuthModal";
 import "./LandingPage.css";
 import Footer from "../../components/Footer";
+import { useNavigate } from "react-router-dom";
 
 const LandingPage = () => {
   const [openModal, setOpenModal] = useState(false);
+  const navigate = useNavigate();
 
   const handleCloseModal = () => setOpenModal(false);
   return (
@@ -263,7 +267,7 @@ const LandingPage = () => {
         </Typography>
         <Grid container columnSpacing={3} rowSpacing={3} mt={5} px={15}>
           <Grid item xs={12} md={6} lg={4}>
-            <Paper align="center" sx={{ height: 250, paddingBottom: 2 }}>
+            <Paper align="center" sx={{ minHeight: 250, paddingBottom: 2 }}>
               <Box
                 sx={{
                   background: `url(${AssessmentImage})`,
@@ -277,13 +281,21 @@ const LandingPage = () => {
               <Typography variant="body2" fontWeight={700} mt={1} mb={3}>
                 Depression Test (Self-Assessment)
               </Typography>
+              <Button
+                size="small"
+                color="secondary"
+                variant="contained"
+                onClick={() => navigate("/qa")}
+              >
+                Take a Test
+              </Button>
             </Paper>
           </Grid>
           <Grid item xs={12} md={6} lg={4}>
-            <Paper align="center" sx={{ height: 250, paddingBottom: 2 }}>
+            <Paper align="center" sx={{ minHeight: 250, paddingBottom: 2 }}>
               <Box
                 sx={{
-                  background: `url(${AssessmentImage})`,
+                  background: `url(${AnxietyTestImage})`,
                   width: "100%",
                   height: "200px",
                   backgroundSize: "contain",
@@ -294,13 +306,21 @@ const LandingPage = () => {
               <Typography variant="body2" fontWeight={700} mt={1} mb={3}>
                 Depression Test (Self-Assessment)
               </Typography>
+              <Button
+                size="small"
+                color="secondary"
+                variant="contained"
+                onClick={() => navigate("/qa2")}
+              >
+                Take a Test
+              </Button>
             </Paper>
           </Grid>
           <Grid item xs={12} md={6} lg={4}>
-            <Paper align="center" sx={{ height: 250, paddingBottom: 2 }}>
+            <Paper align="center" sx={{ minHeight: 250, paddingBottom: 2 }}>
               <Box
                 sx={{
-                  background: `url(${AssessmentImage})`,
+                  background: `url(${PtsdTestImage})`,
                   width: "100%",
                   height: "200px",
                   backgroundSize: "contain",
@@ -311,6 +331,14 @@ const LandingPage = () => {
               <Typography variant="body2" fontWeight={700} mt={1} mb={3}>
                 Depression Test (Self-Assessment)
               </Typography>
+              <Button
+                size="small"
+                color="secondary"
+                variant="contained"
+                onClick={() => navigate("/qa3")}
+              >
+                Take a Test
+              </Button>
             </Paper>
           </Grid>
         </Grid>
@@ -403,15 +431,15 @@ const LandingPage = () => {
         </Box>
       </Box>
       {/* End Services for packages */}
-      <Box 
+      <Box
         sx={{
           backgroundColor: "white",
           paddingBottom: 6,
         }}
         px={15}
       >
-        <Grid container  alignItems="center">
-          <Grid item md={6} sm={12} >
+        <Grid container alignItems="center">
+          <Grid item md={6} sm={12}>
             <Typography variant="h5" fontWeight="bold">
               Need help for someone you care about?
             </Typography>
@@ -423,7 +451,7 @@ const LandingPage = () => {
             </Typography>
           </Grid>
           <Grid item md={6} sm={12} display="flex" justifyContent="center">
-          <img src={FamilyImage} alt="family" height={400} />
+            <img src={FamilyImage} alt="family" height={400} />
           </Grid>
         </Grid>
       </Box>

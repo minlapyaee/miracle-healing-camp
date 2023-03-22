@@ -79,6 +79,7 @@
     width: fit-content;
     padding: 5px 10px;
     margin: 0px 5px;
+    cursor: pointer;
 }
 
 
@@ -88,4 +89,7 @@
     border-radius: 30px;
     border: none;
     margin: 30px;
+}
+.react-datepicker__input-container input {
+    width: 90% !important;
 }

@@ -28,16 +28,12 @@ import { UserContext } from "../context/userContext";
 
 const navItems = [
   {
-    name: "Home",
+    name: "Customer List",
     url: "/",
   },
   {
-    name: "Services",
-    url: "/services",
-  },
-  {
-    name: "Make An Appointment",
-    url: "make-an-appointment",
+    name: "Appointment List",
+    url: "/appointment-list",
   },
   {
     name: "User",
@@ -45,7 +41,7 @@ const navItems = [
   },
 ];
 
-function UserNavigation(props) {
+function AdminNavigation(props) {
   const { user, setUser } = useContext(UserContext);
   const [mobileOpen, setMobileOpen] = useState(false);
   const [openModal, setOpenModal] = useState(false);
@@ -57,7 +53,7 @@ function UserNavigation(props) {
   const handleDrawerToggle = () => setMobileOpen((prevState) => !prevState);
   const handleCloseModal = () => setOpenModal(false);
 
-  console.log(user)
+  console.log(user);
 
   const handleClickProfile = (event) => {
     setAnchorEl(event.currentTarget);
@@ -191,7 +187,9 @@ function UserNavigation(props) {
                     aria-expanded={openProfile ? "true" : undefined}
                     onClick={handleClickProfile}
                   >
-                    <Avatar sx={{ width: 30, height: 30 }}>{user.user.fullname[0]}</Avatar>
+                    <Avatar sx={{ width: 30, height: 30 }}>
+                      {user.user.fullname[0]}
+                    </Avatar>
                   </Button>
                   <Menu
                     id="basic-menu"
@@ -258,9 +256,11 @@ function UserNavigation(props) {
         </Drawer>
       </Box>
 
-      <Box sx={{ background: location === "make-an-appointment" && "#9F9F9F" }}>{props.children}</Box>
+      <Box sx={{ background: location === "make-an-appointment" && "#9F9F9F" }}>
+        {props.children}
+      </Box>
     </div>
   );
 }
 
-export default UserNavigation;
+export default AdminNavigation;

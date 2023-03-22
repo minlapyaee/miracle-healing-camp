@@ -67,3 +67,8 @@
     padding: 30px 10px;
     color: white;
 }
+.noStyle {
+    border: none !important;
+    margin: 0 !important;
+    padding: 0 !important
+}

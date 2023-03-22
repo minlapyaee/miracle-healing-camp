@@ -4,12 +4,19 @@ import LandingPage from "./Pages/LandingPage/LandingPage";
 // Client Pages
 import Book from "./Pages/Client/Book/Book";
 import Blog from "./Pages/Client/Blog/Blog";
-import MainBlog from "./Pages/MainBlog/MainBlog";
+import MainBlog from "./Pages/Client/MainBlog/MainBlog";
 import DetailPost from "./Pages/Client/Blog/DetailPost";
 import Home from "./Pages/Client/Home/Home";
 import Services from "./Pages/Services/Services";
-import Booking from "./Pages/Booking/Booking";
+import Booking from "./Pages/Client/Booking/Booking";
 import QA from "./Pages/QA/QA";
+import PackageForm from "./Pages/Client/PackageForm/PackageForm";
+import CustomerLists from "./Pages/Admin/Customers/CustomerList";
+import CustomerDetail from "./Pages/Admin/Customers/CustomerDetail";
+import AppointmentLists from "./Pages/Admin/Appointment/AppointmentList";
+import AppointmentDetail from "./Pages/Admin/Appointment/AppointmentDetail";
+import QA2 from "./Pages/QA/QA2";
+import QA3 from "./Pages/QA/QA3";
 
 const routes = [
   {
@@ -35,6 +42,18 @@ const routes = [
     key: "QA",
     exact: true,
     component: QA,
+  },
+  {
+    path: "/qa2",
+    key: "QA2",
+    exact: true,
+    component: QA2,
+  },
+  {
+    path: "/qa3",
+    key: "QA3",
+    exact: true,
+    component: QA3,
   },
   {
     path: "/blog",
@@ -76,6 +95,18 @@ const userRoutes = [
     component: QA,
   },
   {
+    path: "/qa2",
+    key: "QA2",
+    exact: true,
+    component: QA2,
+  },
+  {
+    path: "/qa3",
+    key: "QA3",
+    exact: true,
+    component: QA3,
+  },
+  {
     path: "/services",
     key: "SERVICES",
     exact: true,
@@ -87,6 +118,40 @@ const userRoutes = [
     exact: true,
     component: MainBlog,
   },
+  {
+    path: "/purchase_package",
+    key: "PURCHASE_PACKAGE",
+    exact: true,
+    component: PackageForm
+  }
 ];
 
-export { routes, userRoutes };
+const adminRoutes = [
+  {
+    path: "/",
+    key: "CUSTOMER_LISTS",
+    exact: true,
+    component: CustomerLists,
+  },
+  {
+    path: "/appointment-list",
+    key: "Appointment_LISTS",
+    exact: true,
+    component: AppointmentLists,
+  },
+  {
+    path: "/appointment-detail/:id",
+    key: "Appointment_LISTS",
+    exact: true,
+    component: AppointmentDetail,
+  },
+  {
+    path: "/customer-detail/:id",
+    key: "CUSTOMER_DETAIL",
+    exact: true,
+    component: CustomerDetail,
+  },
+
+]
+
+export { routes, userRoutes, adminRoutes };
