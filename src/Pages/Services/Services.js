@@ -11,8 +11,11 @@ import Equality from "../../assets/services/Equality.png";
 
 import "./Services.css";
 import Footer from "../../components/Footer";
+import { useNavigate } from "react-router-dom";
 
 const AboutUs = () => {
+  const navigate = useNavigate()
+
   return (
     <div className="divServices">
       <div className="divServices1">
@@ -24,7 +27,7 @@ const AboutUs = () => {
             7 out of 10 people recover completely. <br/>
             You made it this far. <br/>
             Now, let's get you the help you need.<br/><br/>
-            <button>Book Now</button>
+            <button onClick={() => navigate('/make-an-appointment')}>Book Now</button>
           </p>
           <img src={ConductGroup}/>
         </span>
@@ -94,7 +97,7 @@ const AboutUs = () => {
             <label>Join our community</label>
           </li>
         </ul>
-        <button>Book Now</button>
+        <button onClick={() => navigate('/make-an-appointment')}>Book Now</button>
       </div>
 
 

@@ -17,6 +17,8 @@ import AppointmentLists from "./Pages/Admin/Appointment/AppointmentList";
 import AppointmentDetail from "./Pages/Admin/Appointment/AppointmentDetail";
 import QA2 from "./Pages/QA/QA2";
 import QA3 from "./Pages/QA/QA3";
+import Profile from "./Pages/Profile/Profile";
+import ResetPwd from "./Pages/ResetPwd/ResetPwd";
 
 const routes = [
   {
@@ -113,6 +115,12 @@ const userRoutes = [
     component: Services,
   },
   {
+    path: "/profile",
+    key: "PROFILE",
+    exact: true,
+    component: Profile,
+  },
+  {
     path: "/main-blog",
     key: "Main_Blog",
     exact: true,
@@ -122,8 +130,14 @@ const userRoutes = [
     path: "/purchase_package",
     key: "PURCHASE_PACKAGE",
     exact: true,
-    component: PackageForm
-  }
+    component: PackageForm,
+  },
+  {
+    path: "/reset-password/:id",
+    key: "RESET_PASSWORD",
+    exact: true,
+    component: ResetPwd,
+  },
 ];
 
 const adminRoutes = [
@@ -151,7 +165,18 @@ const adminRoutes = [
     exact: true,
     component: CustomerDetail,
   },
-
-]
+  {
+    path: "/profile",
+    key: "PROFILE",
+    exact: true,
+    component: Profile,
+  },
+  {
+    path: "/reset-password/:id",
+    key: "RESET_PASSWORD",
+    exact: true,
+    component: ResetPwd,
+  },
+];
 
 export { routes, userRoutes, adminRoutes };

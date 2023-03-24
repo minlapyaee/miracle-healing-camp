@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import "./QA.css";
 import Givingletter from "../../assets/QA/givingletter.png";
-import { Link } from "@mui/material";
+import { Link } from 'react-router-dom'
 
 const questions = [
   {
@@ -153,7 +153,7 @@ const QA2 = () => {
               >
                 Score: {result.score}/11
               </li>
-              <li
+              {/* <li
                 className="liemail "
                 style={{
                   display: "flex",
@@ -162,7 +162,7 @@ const QA2 = () => {
                 }}
               >
                 Email Result
-              </li>
+              </li> */}
               <li
                 className="litest"
                 style={{
@@ -213,7 +213,7 @@ const QA2 = () => {
                   name={question.name}
                   id={question.name + 1}
                   value={0.25}
-                  checked={0.25 === values[question.name]}
+                  checked={0.25 === Number(values[question.name])}
                   onChange={handleChange}
                 />
                 <label for={question.name + 1}>Not at all</label>
@@ -222,7 +222,7 @@ const QA2 = () => {
                   name={question.name}
                   id={question.name + 2}
                   value={0.5}
-                  checked={0.5 === values[question.name]}
+                  checked={0.5 === Number(values[question.name])}
                   onChange={handleChange}
                 />
                 <label for={question.name + 2}>Serveral days</label>
@@ -231,7 +231,7 @@ const QA2 = () => {
                   name={question.name}
                   id={question.name + 3}
                   value={0.75}
-                  checked={0.75 === values[question.name]}
+                  checked={0.75 === Number(values[question.name])}
                   onChange={handleChange}
                 />
                 <label for={question.name + 3}>More than half a days</label>
@@ -240,7 +240,7 @@ const QA2 = () => {
                   name={question.name}
                   id={question.name + 4}
                   value={1}
-                  checked={1 === values[question.name]}
+                  checked={1 === Number(values[question.name])}
                   onChange={handleChange}
                 />
                 <label for={question.name + 4}>Nearly everyday</label>

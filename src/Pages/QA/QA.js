@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import "./QA.css";
 import Givingletter from "../../assets/QA/givingletter.png";
-import { Link, } from "@mui/material";
+import { Link } from 'react-router-dom'
 
 const questions = [
   {
@@ -69,12 +69,14 @@ const QA = () => {
     rank: "",
   });
   const [isDoneTest, setIsDoneTest] = useState(false);
+  
 
   useEffect(() => {
     window.scrollTo(0, 0);
   }, []);
 
   const handleChange = (e) => {
+    console.log({[e.target.name]: e.target.value})
     setValues({
       ...values,
       [e.target.name]: e.target.value,
@@ -83,19 +85,19 @@ const QA = () => {
 
   const reTakeRest = () => {
     setValues({
-        one: 0.25,
-    two: 0.25,
-    three: 0.25,
-    four: 0.25,
-    five: 0.25,
-    six: 0.25,
-    seven: 0.25,
-    eight: 0.25,
-    nine: 0.25,
-    ten: 0.25,  
-    })
-    setIsDoneTest(false)
-  }
+      one: 0.25,
+      two: 0.25,
+      three: 0.25,
+      four: 0.25,
+      five: 0.25,
+      six: 0.25,
+      seven: 0.25,
+      eight: 0.25,
+      nine: 0.25,
+      ten: 0.25,
+    });
+    setIsDoneTest(false);
+  };
 
   const handleSubmit = () => {
     let cloneValue = { ...values };
@@ -135,7 +137,7 @@ const QA = () => {
         <>
           <div className="divQA3" style={{ display: "flex" }}>
             <h1>Depression Test - &nbsp; </h1>
-            <h1 style={{ color: "#FFC926"}}>{result.rank}</h1>
+            <h1 style={{ color: "#FFC926" }}>{result.rank}</h1>
           </div>
           <div className="divQA4">
             <ul>
@@ -145,12 +147,12 @@ const QA = () => {
                   display: "flex",
                   justifyContent: "center",
                   alignItems: "center",
-                  width: 200
+                  width: 200,
                 }}
               >
                 Score: {result.score}/10
               </li>
-              <li
+              {/* <li
                 className="liemail "
                 style={{
                   display: "flex",
@@ -159,7 +161,7 @@ const QA = () => {
                 }}
               >
                 Email Result
-              </li>
+              </li> */}
               <li
                 className="litest"
                 style={{
@@ -179,7 +181,7 @@ const QA = () => {
                   alignItems: "center",
                 }}
               >
-                <Link
+                <Link 
                   to="/"
                   style={{ color: "#fff", textDecoration: "underline" }}
                 >
@@ -188,8 +190,7 @@ const QA = () => {
               </li>
             </ul>
             <div style={{ width: 400 }}>
-            <img src={Givingletter} width="100%" height="100%"></img>
-
+              <img src={Givingletter} width="100%" height="100%"></img>
             </div>
           </div>
         </>
@@ -211,7 +212,7 @@ const QA = () => {
                   name={question.name}
                   id={question.name + 1}
                   value={0.25}
-                  checked={0.25 === values[question.name]}
+                  checked={0.25 === Number(values[question.name])}
                   onChange={handleChange}
                 />
                 <label for={question.name + 1}>Not at all</label>
@@ -220,7 +221,7 @@ const QA = () => {
                   name={question.name}
                   id={question.name + 2}
                   value={0.5}
-                  checked={0.5 === values[question.name]}
+                  checked={0.5 === Number(values[question.name])}
                   onChange={handleChange}
                 />
                 <label for={question.name + 2}>Serveral days</label>
@@ -229,7 +230,7 @@ const QA = () => {
                   name={question.name}
                   id={question.name + 3}
                   value={0.75}
-                  checked={0.75 === values[question.name]}
+                  checked={0.75 === Number(values[question.name])}
                   onChange={handleChange}
                 />
                 <label for={question.name + 3}>More than half a days</label>
@@ -238,7 +239,7 @@ const QA = () => {
                   name={question.name}
                   id={question.name + 4}
                   value={1}
-                  checked={1 === values[question.name]}
+                  checked={1 === Number(values[question.name])}
                   onChange={handleChange}
                 />
                 <label for={question.name + 4}>Nearly everyday</label>

@@ -8,18 +8,20 @@ import "react-datepicker/dist/react-datepicker.css";
 import api from "../../../config/api";
 import { UserContext } from "../../../context/userContext";
 import { Box } from "@mui/system";
-import { CircularProgress } from "@mui/material";
+import { CircularProgress, Typography } from "@mui/material";
 import StatusPage from "./StatusPage";
 import MeetingLinkPage from "./MeetingLinkPage";
 
 const Booking = () => {
   const { user } = useContext(UserContext);
   const [showStatusPage, setShowStatusPage] = useState(false);
-  const [fetchDataLoader, setFetchDataLoader] = useState(true)
+  const [fetchDataLoader, setFetchDataLoader] = useState(true);
   const [showMeetingLinkPage, setShowMeetingLinkPage] = useState(false);
-  const [meeting, setMeeting] = useState({})
+  const [meeting, setMeeting] = useState({});
   const [selectNowDateOption, setSelectNowDateOption] = useState("schedule");
   const [loading, setLoading] = useState(false);
+  const [isVerified, setIsVerified] = useState(false);
+  const [isExpired, setIsExpired] = useState(false);
   const [formData, setFormData] = useState({
     first_name: "",
     last_name: "",
@@ -53,25 +55,44 @@ const Booking = () => {
 
   useEffect(() => {
     api
-      .get("/client/check_appointment", null, {
+      .get("/client/check_customer_package", null, {
         accessToken: user.accessToken,
         rftoken_id: localStorage.getItem("rftoken_id"),
       })
-      .then((res) => {
-        setFetchDataLoader(false)
-        if (res.message === "success") {
-          if (res?.data?.status === "pending") {
-            setShowStatusPage(true);
-          }
-          if(res?.data?.status === "progress") {
-            setShowMeetingLinkPage(true)
-            setMeeting(res.meeting)
-          }
+      .then((result) => {
+        setFetchDataLoader(false);
+        console.log("result---------", result);
+
+        // expired
+        if (result.data === null) {
+          return setIsExpired(true);
         }
-        console.log("CHECK APPOINTMENT", res);
-      })
-      .catch((err) => {
-        console.log("err", err);
+
+        if (result.data.status === "verified") {
+          setFetchDataLoader(true);
+          api
+            .get("/client/check_appointment", null, {
+              accessToken: user.accessToken,
+              rftoken_id: localStorage.getItem("rftoken_id"),
+            })
+            .then((res) => {
+              setFetchDataLoader(false);
+              setIsVerified(true);
+              if (res.message === "success") {
+                if (res?.data?.status === "pending") {
+                  setShowStatusPage(true);
+                }
+                if (res?.data?.status === "progress") {
+                  setShowMeetingLinkPage(true);
+                  setMeeting(res.meeting);
+                }
+              }
+              console.log("CHECK APPOINTMENT", res);
+            })
+            .catch((err) => {
+              console.log("err", err);
+            });
+        }
       });
   }, []);
 
@@ -84,7 +105,7 @@ const Booking = () => {
         rftoken_id: localStorage.getItem("rftoken_id"),
       })
       .then((res) => {
-        setShowStatusPage(true)
+        setShowStatusPage(true);
         setLoading(false);
         console.log("CREATE APPOINTMENT", res);
       })
@@ -93,14 +114,50 @@ const Booking = () => {
       });
   };
 
-  if(fetchDataLoader) {
-    return <div>Loading</div>
+  if (fetchDataLoader) {
+    return <Box mt={15}>Loading</Box>;
+  }
+
+  if (isExpired) {
+    return (
+      <Box mt={15}>
+        <Box
+          display="flex"
+          justifyContent="center"
+          alignItems="center"
+          flexDirection="column"
+          sx={{ height: "60vh" }}
+        >
+          <Typography variant="h3" component="div" fontWeight="bold">
+            Please purchase a package.
+          </Typography>
+        </Box>
+      </Box>
+    );
+  }
+
+  if (!isVerified) {
+    return (
+      <Box mt={15}>
+        <Box
+          display="flex"
+          justifyContent="center"
+          alignItems="center"
+          flexDirection="column"
+          sx={{ height: "60vh" }}
+        >
+          <Typography variant="h3" component="div" fontWeight="bold">
+            Your payment method is under processing.
+          </Typography>
+        </Box>
+      </Box>
+    );
   }
 
   return (
     <div className="divBooking">
       {showMeetingLinkPage ? (
-        <MeetingLinkPage meeting={meeting}/>
+        <MeetingLinkPage meeting={meeting} />
       ) : showStatusPage ? (
         <StatusPage />
       ) : (

@@ -5,10 +5,10 @@ import {
   FormControl,
   FormControlLabel,
   FormLabel,
-  Link,
   Radio,
   RadioGroup,
 } from "@mui/material";
+import { Link } from 'react-router-dom'
 
 const questions = [
   {
@@ -112,13 +112,13 @@ const QA3 = () => {
       total += Number(value);
     });
     total += multipleRadio.length * 0.25
-    if (total <= 5) {
+    if (total <= 2) {
       console.log("Moderate");
       setResult({
         rank: "Moderate",
         score: total,
       });
-    } else if (total >= 8) {
+    } else if (total <= 4) {
       console.log("Mild");
       setResult({
         rank: "Mild",
@@ -159,7 +159,7 @@ const QA3 = () => {
               >
                 Score: {result.score}/5
               </li>
-              <li
+              {/* <li
                 className="liemail "
                 style={{
                   display: "flex",
@@ -168,7 +168,7 @@ const QA3 = () => {
                 }}
               >
                 Email Result
-              </li>
+              </li> */}
               <li
                 className="litest"
                 style={{
@@ -244,7 +244,7 @@ const QA3 = () => {
                     name={question.name}
                     id={question.name + 1}
                     value={0.25}
-                    checked={0.25 === values[question.name]}
+                    checked={0.25 === Number(values[question.name])}
                     onChange={handleChange}
                   />
                   <label for={question.name + 1}>Not at all</label>
@@ -253,7 +253,7 @@ const QA3 = () => {
                     name={question.name}
                     id={question.name + 2}
                     value={0.5}
-                    checked={0.5 === values[question.name]}
+                    checked={0.5 === Number(values[question.name])}
                     onChange={handleChange}
                   />
                   <label for={question.name + 2}>Serveral days</label>
@@ -262,7 +262,7 @@ const QA3 = () => {
                     name={question.name}
                     id={question.name + 3}
                     value={0.75}
-                    checked={0.75 === values[question.name]}
+                    checked={0.75 === Number(values[question.name])}
                     onChange={handleChange}
                   />
                   <label for={question.name + 3}>More than half a days</label>
@@ -271,7 +271,7 @@ const QA3 = () => {
                     name={question.name}
                     id={question.name + 4}
                     value={1}
-                    checked={1 === values[question.name]}
+                    checked={1 === Number(values[question.name])}
                     onChange={handleChange}
                   />
                   <label for={question.name + 4}>Nearly everyday</label>

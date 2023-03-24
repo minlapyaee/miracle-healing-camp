@@ -37,11 +37,11 @@ const navItems = [
   },
   {
     name: "Make An Appointment",
-    url: "make-an-appointment",
+    url: "/make-an-appointment",
   },
   {
     name: "User",
-    url: "profile",
+    url: "/profile",
   },
 ];
 
@@ -202,7 +202,7 @@ function UserNavigation(props) {
                       "aria-labelledby": "basic-button",
                     }}
                   >
-                    <MenuItem onClick={handleCloseProfile}>Profile</MenuItem>
+                    <MenuItem onClick={() => navigate('/profile')}>Profile</MenuItem>
                     <MenuItem onClick={handleLogout}>Logout</MenuItem>
                   </Menu>
                 </>

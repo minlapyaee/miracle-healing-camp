@@ -37,7 +37,7 @@ const navItems = [
   },
   {
     name: "User",
-    url: "profile",
+    url: "/profile",
   },
 ];
 
@@ -200,7 +200,7 @@ function AdminNavigation(props) {
                       "aria-labelledby": "basic-button",
                     }}
                   >
-                    <MenuItem onClick={handleCloseProfile}>Profile</MenuItem>
+                    <MenuItem onClick={() => navigate('/profile')}>Profile</MenuItem>
                     <MenuItem onClick={handleLogout}>Logout</MenuItem>
                   </Menu>
                 </>
