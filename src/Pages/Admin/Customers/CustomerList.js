@@ -64,20 +64,7 @@ const CustomerLists = () => {
     },
   }));
 
-  const rows = [
-    {
-      name: "Name",
-      date: "26 Feb",
-      time: "1:00",
-      status: "Completed",
-    },
-    {
-      name: ":D",
-      date: "28 Feb",
-      time: "3:00",
-      status: "Pending",
-    },
-  ];
+
 
   return (
     <Box sx={{ zIndex: 3, position: "relative" }}>

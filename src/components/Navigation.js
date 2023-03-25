@@ -34,6 +34,10 @@ const navItems = [
     name: "Services",
     url: "services",
   },
+  {
+    name: "Classes",
+    url: "/classes",
+  },
 
   {
     name: "Get Started",

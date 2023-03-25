@@ -19,6 +19,9 @@ import QA2 from "./Pages/QA/QA2";
 import QA3 from "./Pages/QA/QA3";
 import Profile from "./Pages/Profile/Profile";
 import ResetPwd from "./Pages/ResetPwd/ResetPwd";
+import ClassList from "./Pages/Admin/ClassForm/ClassList";
+import ClassForm from "./Pages/Admin/ClassForm/ClassForm";
+import Classes from "./Pages/Classes/Classes";
 
 const routes = [
   {
@@ -62,6 +65,12 @@ const routes = [
     key: "BLOG",
     exact: true,
     component: Blog,
+  },
+  {
+    path: "/classes",
+    key: "CLASSES",
+    exact: true,
+    component: Classes,
   },
 ];
 
@@ -138,6 +147,12 @@ const userRoutes = [
     exact: true,
     component: ResetPwd,
   },
+  {
+    path: "/classes",
+    key: "CLASSES",
+    exact: true,
+    component: Classes,
+  },
 ];
 
 const adminRoutes = [
@@ -177,6 +192,25 @@ const adminRoutes = [
     exact: true,
     component: ResetPwd,
   },
+  {
+    path: "/classes",
+    key: "CLASS_LIST",
+    exact: true,
+    component: ClassList,
+  },
+  {
+    path: "/create-class",
+    key: "CREATE_CLASS",
+    exact: true,
+    component: ClassForm,
+  },
+  {
+    path: "/create-class/:id",
+    key: "CREATE_CLASS",
+    exact: true,
+    component: ClassForm,
+  },
+  
 ];
 
 export { routes, userRoutes, adminRoutes };

@@ -36,6 +36,10 @@ const navItems = [
     url: "/appointment-list",
   },
   {
+    name: "Classes",
+    url: "/classes",
+  },
+  {
     name: "User",
     url: "/profile",
   },
