@@ -1,6 +1,8 @@
 import React, { useContext, useState, useEffect } from "react";
 import Footer from "../../../components/Footer";
 import Reminderinthecalendar from "../../../assets/Booking/Reminderinthecalendar.png";
+import ProcessGIF from "../../../assets/gif/process.gif";
+import PaymentGIF from "../../../assets/gif/payment.gif";
 import "./Booking.css";
 import DatePicker from "react-datepicker";
 
@@ -11,6 +13,8 @@ import { Box } from "@mui/system";
 import { CircularProgress, Typography } from "@mui/material";
 import StatusPage from "./StatusPage";
 import MeetingLinkPage from "./MeetingLinkPage";
+import CircularCustomLoader from "../../../components/CircularCustomLoader";
+import { Link } from "react-router-dom";
 
 const Booking = () => {
   const { user } = useContext(UserContext);
@@ -61,7 +65,6 @@ const Booking = () => {
       })
       .then((result) => {
         setFetchDataLoader(false);
-        console.log("result---------", result);
 
         // expired
         if (result.data === null) {
@@ -87,7 +90,6 @@ const Booking = () => {
                   setMeeting(res.meeting);
                 }
               }
-              console.log("CHECK APPOINTMENT", res);
             })
             .catch((err) => {
               console.log("err", err);
@@ -107,7 +109,6 @@ const Booking = () => {
       .then((res) => {
         setShowStatusPage(true);
         setLoading(false);
-        console.log("CREATE APPOINTMENT", res);
       })
       .catch((err) => {
         console.log("errr", err);
@@ -115,7 +116,19 @@ const Booking = () => {
   };
 
   if (fetchDataLoader) {
-    return <Box mt={15}>Loading</Box>;
+    return (
+      <Box
+        sx={{
+          width: "100%",
+          height: "100vh",
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+        }}
+      >
+        <CircularCustomLoader />
+      </Box>
+    );
   }
 
   if (isExpired) {
@@ -128,8 +141,10 @@ const Booking = () => {
           flexDirection="column"
           sx={{ height: "60vh" }}
         >
-          <Typography variant="h3" component="div" fontWeight="bold">
-            Please purchase a package.
+          <img src={PaymentGIF} alt="payment" />
+          <Typography component="div" fontWeight="bold">
+            Please purchase a package. &nbsp;
+            <Link to="/purchase_package">Purchase here</Link>
           </Typography>
         </Box>
       </Box>
@@ -146,8 +161,9 @@ const Booking = () => {
           flexDirection="column"
           sx={{ height: "60vh" }}
         >
-          <Typography variant="h3" component="div" fontWeight="bold">
-            Your payment method is under processing.
+          <img src={ProcessGIF} alt="process" />
+          <Typography component="div" fontWeight="bold">
+            Your payment method is under processing. Please wait.
           </Typography>
         </Box>
       </Box>

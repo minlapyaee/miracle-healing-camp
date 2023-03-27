@@ -40,6 +40,10 @@ const navItems = [
     url: "/services",
   },
   {
+    name: "Community",
+    url: "/blog",
+  },
+  {
     name: "Make An Appointment",
     url: "/make-an-appointment",
   },
@@ -60,8 +64,6 @@ function UserNavigation(props) {
 
   const handleDrawerToggle = () => setMobileOpen((prevState) => !prevState);
   const handleCloseModal = () => setOpenModal(false);
-
-  console.log(user)
 
   const handleClickProfile = (event) => {
     setAnchorEl(event.currentTarget);
@@ -195,7 +197,9 @@ function UserNavigation(props) {
                     aria-expanded={openProfile ? "true" : undefined}
                     onClick={handleClickProfile}
                   >
-                    <Avatar sx={{ width: 30, height: 30 }}>{user.user.fullname[0]}</Avatar>
+                    <Avatar sx={{ width: 30, height: 30 }}>
+                      {user.user.fullname[0]}
+                    </Avatar>
                   </Button>
                   <Menu
                     id="basic-menu"
@@ -206,7 +210,9 @@ function UserNavigation(props) {
                       "aria-labelledby": "basic-button",
                     }}
                   >
-                    <MenuItem onClick={() => navigate('/profile')}>Profile</MenuItem>
+                    <MenuItem onClick={() => navigate("/profile")}>
+                      Profile
+                    </MenuItem>
                     <MenuItem onClick={handleLogout}>Logout</MenuItem>
                   </Menu>
                 </>
@@ -226,7 +232,10 @@ function UserNavigation(props) {
                   variant="body2"
                   key={item.name}
                   sx={{
-                    color: "whiteColor",
+                    color:
+                      location.pathname === item.url
+                        ? "secondary.main"
+                        : "whiteColor",
                     fontSize: 15,
                     textDecoration: "none",
                     marginRight: 4,
@@ -262,7 +271,9 @@ function UserNavigation(props) {
         </Drawer>
       </Box>
 
-      <Box sx={{ background: location === "make-an-appointment" && "#9F9F9F" }}>{props.children}</Box>
+      <Box sx={{ background: location === "make-an-appointment" && "#9F9F9F" }}>
+        {props.children}
+      </Box>
     </div>
   );
 }

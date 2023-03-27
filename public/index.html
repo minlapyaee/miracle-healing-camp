@@ -19,7 +19,33 @@
     <div id="root"></div>
 
     <script>
-      console.error = function () {};
+      let console = (function (o) {
+        return {
+          log: function (e) {
+            o.log("%cStop!", "color: red;font-size:25px;");
+          },
+          info: function (e) {
+            o.info(null);
+          },
+          warn: function (e) {
+            o.warn(null);
+          },
+          error: function (e) {
+            o.error(null);
+          },
+        };
+      })(window.console);
+      (window.console = console),
+        (document.onkeydown = function (o) {
+          return (
+            123 != event.keyCode &&
+            (!o.ctrlKey || !o.shiftKey || o.keyCode != "I".charCodeAt(0)) &&
+            (!o.ctrlKey || !o.shiftKey || o.keyCode != "C".charCodeAt(0)) &&
+            (!o.ctrlKey || !o.shiftKey || o.keyCode != "J".charCodeAt(0)) &&
+            (!o.ctrlKey || o.keyCode != "U".charCodeAt(0)) &&
+            void 0
+          );
+        });
     </script>
   </body>
 </html>

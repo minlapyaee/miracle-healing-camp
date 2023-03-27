@@ -30,7 +30,7 @@ function App() {
         console.log("err => ", err);
       });
   };
-
+console.log('hello')
   useEffect(() => {
     if (user?.rftoken_id) {
       localStorage.setItem("rftoken_id", user?.rftoken_id);

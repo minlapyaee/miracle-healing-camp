@@ -321,11 +321,11 @@ const Blog = (props) => {
 
   if (loader) {
     return (
-      <div>
+      <Box  sx={{ width: 800, margin: "auto", marginTop: 15 }}>
         <Skeleton variant="rectangular" fullWidth height={130} />;
         <Skeleton variant="rectangular" fullWidth mt={2} height={300} />;
         <Skeleton variant="rectangular" fullWidth mt={2} height={300} />;
-      </div>
+      </Box>
     );
   }
   return (

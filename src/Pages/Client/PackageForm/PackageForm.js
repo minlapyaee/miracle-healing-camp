@@ -31,10 +31,7 @@ const PackageForm = () => {
     setShowErrorBox(false);
     setShowSuccessBox(false);
     const base64File = await convertImageToBase64(file);
-    console.log({
-      file: base64File,
-      user_id: user.user._id,
-    });
+
     const data = {
       image: base64File,
     };
@@ -50,7 +47,6 @@ const PackageForm = () => {
         if (res.message === "success") {
           setShowSuccessBox(true);
         }
-        console.log("REGISTER CUSTOMER", res);
       })
       .catch((err) => {
         console.log("errr", err);

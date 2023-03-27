@@ -32,13 +32,11 @@ const ResetPwd = () => {
           }else {
             setShowError("Somethign went wrong.");
           }
-          console.log("res", res);
         })
         .catch((err) => {
           setShowError("Something went wrong");
           console.log("errr", err);
         });
-      console.log(password);
     }
   };
 

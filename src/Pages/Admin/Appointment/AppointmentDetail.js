@@ -97,7 +97,6 @@ const AppointmentDetail = () => {
         }
       )
       .then((res) => {
-        console.log("res", res);
         if (res.message === "success") {
           setData(res.data);
           setMeetingLink(res.meeting);
@@ -114,24 +113,23 @@ const AppointmentDetail = () => {
   const handleSubmit = () => {
     setLoading(true);
     setShowErrorField(false);
-    const data = {
+    const formData = {
       status: status.toLowerCase(),
+      appointment_id: data._id,
       id: params.id,
     };
     let arr = ["pending", "progress", "completed"];
-    console.log(status);
     if (!status) {
       setLoading(false);
       return setShowErrorField(true);
     }
     api
-      .post("/admin/update_appointment", JSON.stringify(data), {
+      .post("/admin/update_appointment", JSON.stringify(formData), {
         accessToken: user.accessToken,
         rftoken_id: localStorage.getItem("rftoken_id"),
       })
       .then((res) => {
         setLoading(false);
-        console.log("UPDATED", res);
         if (res.message === "success") {
           setMeetingLink(res.meeting);
           // setShowSuccessBox(true);

@@ -106,25 +106,21 @@ const QA = () => {
       total += Number(value);
     });
     if (total <= 5) {
-      console.log("Moderate");
       setResult({
         rank: "Moderate",
         score: total,
       });
     } else if (total >= 8) {
-      console.log("Mild");
       setResult({
         rank: "Mild",
         score: total,
       });
     } else {
-      console.log("Serious");
       setResult({
         rank: "Serious",
         score: total,
       });
     }
-    console.log(total);
     setIsDoneTest(true);
   };
 

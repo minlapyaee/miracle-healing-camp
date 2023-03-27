@@ -113,25 +113,21 @@ const QA3 = () => {
     });
     total += multipleRadio.length * 0.25
     if (total <= 2) {
-      console.log("Moderate");
       setResult({
         rank: "Moderate",
         score: total,
       });
     } else if (total <= 4) {
-      console.log("Mild");
       setResult({
         rank: "Mild",
         score: total,
       });
-    } else {
-      console.log("Serious");
+    } else {;
       setResult({
         rank: "Serious",
         score: total,
       });
     }
-    console.log(total);
     setIsDoneTest(true);
   };
 

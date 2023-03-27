@@ -18,10 +18,12 @@ import "react-datepicker/dist/react-datepicker.css";
 import { useNavigate } from "react-router-dom";
 import { UserContext } from "../../../context/userContext";
 import moment from "moment";
+import CircularCustomLoader from "../../../components/CircularCustomLoader";
 
 const CustomerLists = () => {
   const [customerList, setCustomerList] = useState([]);
   const navigate = useNavigate();
+  const [loader, setLoader] = useState(true);
   const { user } = useContext(UserContext);
 
   useEffect(() => {
@@ -35,10 +37,10 @@ const CustomerLists = () => {
         }
       )
       .then((res) => {
+        setLoader(false)
         if (res.message === "success") {
           setCustomerList(res.data);
         }
-        console.log("res", res);
       })
       .catch((err) => {
         console.log("err", err);
@@ -64,7 +66,21 @@ const CustomerLists = () => {
     },
   }));
 
-
+  if (loader) {
+    return (
+      <Box
+        sx={{
+          width: "100%",
+          height: "100vh",
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+        }}
+      >
+        <CircularCustomLoader />
+      </Box>
+    );
+  }
 
   return (
     <Box sx={{ zIndex: 3, position: "relative" }}>
@@ -106,7 +122,11 @@ const CustomerLists = () => {
                       {customer.status}
                     </StyledTableCell>
                     <StyledTableCell align="right">
-                      <Box display='flex' justifyContent="flex-end" alignItems="center">
+                      <Box
+                        display="flex"
+                        justifyContent="flex-end"
+                        alignItems="center"
+                      >
                         <EditIcon
                           sx={{
                             cursor: "pointer",
@@ -117,7 +137,6 @@ const CustomerLists = () => {
                         />
                         {/* <Box ml={2} sx={{ cursor: "pointer" }}>Audit</Box> */}
                       </Box>
-
                     </StyledTableCell>
                   </StyledTableRow>
                 ))}

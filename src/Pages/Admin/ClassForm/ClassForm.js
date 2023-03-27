@@ -34,7 +34,6 @@ const ClassForm = () => {
           }
         )
         .then((res) => {
-          console.log("res-------", res);
           if(res.success) {
             setFormData({
                 class_name: res.data.class_name,
@@ -60,7 +59,6 @@ const ClassForm = () => {
         rftoken_id: localStorage.getItem("rftoken_id"),
       })
       .then((res) => {
-        console.log("res", res);
         navigate("/classes");
       })
       .catch((err) => {

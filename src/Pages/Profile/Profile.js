@@ -1,7 +1,11 @@
 import {
+  Alert,
   Avatar,
   Button,
+  CircularProgress,
   FormControl,
+  IconButton,
+  Snackbar,
   TextField,
   Typography,
 } from "@mui/material";
@@ -14,6 +18,8 @@ const Profile = () => {
   const { user, setUser } = useContext(UserContext);
   const [fullname, setFullname] = useState(user.user.fullname);
   const [showError, setShowError] = useState(null);
+  const [showResetSuccessAlert, setShowResetSuccessAlert] = useState(false)
+  const [resetLoader, setResetLoader] = useState(false);
   const [showSuccess, setShowSuccess] = useState(false);
 
   const handleSubmit = () => {
@@ -35,7 +41,6 @@ const Profile = () => {
             setUser(res);
             setShowSuccess(true);
           }
-          console.log("res", res);
         })
         .catch((err) => {
           setShowError("Something went wrong");
@@ -45,6 +50,7 @@ const Profile = () => {
   };
 
   const handleResetPwd = () => {
+    setResetLoader(true);
     api
       .post(
         "/user/reset_password_link",
@@ -55,7 +61,10 @@ const Profile = () => {
         }
       )
       .then((res) => {
-        console.log("res", res);
+        setResetLoader(false);
+        if (res.message === "success") {
+          setShowResetSuccessAlert(true)
+        }
       })
       .catch((err) => {
         console.log("errr", err);
@@ -148,15 +157,35 @@ const Profile = () => {
         >
           Update
         </Button>
-        <Button
-          size="small"
-          color="error"
-          variant="contained"
-          onClick={handleResetPwd}
-          sx={{ marginTop: 5 }}
-        >
-          Reset Password
-        </Button>
+        <Snackbar
+                    open={showResetSuccessAlert}
+                    anchorOrigin={{ vertical: "bottom", horizontal: "center" }}
+                  >
+                    <Alert
+                      severity={"success"}
+                      onClose={() => {
+                        setShowResetSuccessAlert(false)
+                      }}
+                    >
+                     Sent Reset Password Link. Please check your mail
+                    </Alert>
+                      </Snackbar>
+        <Box mt={5}>
+          {resetLoader ? (
+            <CircularProgress
+              sx={{ width: "30px !important", height: "30px !important" }}
+            />
+          ) : (
+            <Button
+              size="small"
+              color="error"
+              variant="contained"
+              onClick={handleResetPwd}
+            >
+              Reset Password
+            </Button>
+          )}
+        </Box>
       </Box>
     </Box>
   );

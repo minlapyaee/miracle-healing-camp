@@ -20,19 +20,20 @@ import {
 } from "@mui/material/";
 import DragHandleIcon from "@mui/icons-material/DragHandle";
 import AuthModal from "./AuthModal";
+import { useLocation } from "react-router-dom";
 
 const navItems = [
   {
     name: "Home",
     url: "/",
   },
-    {
+  {
     name: "About Us",
-    url: "about-us",
+    url: "/about-us",
   },
   {
     name: "Services",
-    url: "services",
+    url: "/services",
   },
   {
     name: "Classes",
@@ -48,6 +49,7 @@ const navItems = [
 function Navigation(props) {
   const [mobileOpen, setMobileOpen] = useState(false);
   const [openModal, setOpenModal] = useState(false);
+  const location = useLocation();
 
   const handleDrawerToggle = () => setMobileOpen((prevState) => !prevState);
   const handleCloseModal = () => setOpenModal(false);
@@ -178,7 +180,10 @@ function Navigation(props) {
                   variant="body2"
                   key={item.name}
                   sx={{
-                    color: "whiteColor",
+                    color:
+                      location.pathname === item.url
+                        ? "secondary.main"
+                        : "whiteColor",
                     fontSize: 15,
                     textDecoration: "none",
                     marginRight: 4,

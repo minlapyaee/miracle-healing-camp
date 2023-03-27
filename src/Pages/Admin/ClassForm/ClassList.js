@@ -37,11 +37,9 @@ const ClassList = () => {
       }
     )
     .then((res) => {
-      console.log('resss', res)
       if (res.message === "success") {
         setClassList(res.data);
       }
-      console.log("res", res);
     })
     .catch((err) => {
       console.log("err", err);
@@ -60,7 +58,6 @@ const ClassList = () => {
       rftoken_id: localStorage.getItem("rftoken_id"),
     })
     .then((res) => {
-      console.log("res", res);
       fetchClass()
     })
     .catch((err) => {

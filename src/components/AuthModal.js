@@ -181,7 +181,6 @@ const AuthModal = ({ openModal, handleCloseModal }) => {
       )
       .then((res) => {
         setLoading(false);
-        console.log("Register=== ", res);
         if (res.success) {
           setShowOTPForm(true);
         } else {
@@ -439,7 +438,6 @@ const AuthModal = ({ openModal, handleCloseModal }) => {
         } else {
           setOtpError("Something went wrong.");
         }
-        console.log("res", res);
       })
       .catch((err) => {
         console.log("err", err);

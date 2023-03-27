@@ -57,8 +57,6 @@ function AdminNavigation(props) {
   const handleDrawerToggle = () => setMobileOpen((prevState) => !prevState);
   const handleCloseModal = () => setOpenModal(false);
 
-  console.log(user);
-
   const handleClickProfile = (event) => {
     setAnchorEl(event.currentTarget);
   };
@@ -204,7 +202,9 @@ function AdminNavigation(props) {
                       "aria-labelledby": "basic-button",
                     }}
                   >
-                    <MenuItem onClick={() => navigate('/profile')}>Profile</MenuItem>
+                    <MenuItem onClick={() => navigate("/profile")}>
+                      Profile
+                    </MenuItem>
                     <MenuItem onClick={handleLogout}>Logout</MenuItem>
                   </Menu>
                 </>
@@ -224,7 +224,10 @@ function AdminNavigation(props) {
                   variant="body2"
                   key={item.name}
                   sx={{
-                    color: "whiteColor",
+                    color:
+                      location.pathname === item.url
+                        ? "secondary.main"
+                        : "whiteColor",
                     fontSize: 15,
                     textDecoration: "none",
                     marginRight: 4,

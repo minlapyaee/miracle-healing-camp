@@ -31,7 +31,6 @@ const CustomerDetail = () => {
         }
       )
       .then((res) => {
-        console.log("res", res);
         if (res.message === "success") {
           setStatus(res.data.status);
           setId(res.data._id);
@@ -55,7 +54,6 @@ const CustomerDetail = () => {
         rftoken_id: localStorage.getItem("rftoken_id"),
       })
       .then((res) => {
-        console.log("UPDATED", res);
         if (res.message === "success") {
           setShowSuccessBox(true);
         }

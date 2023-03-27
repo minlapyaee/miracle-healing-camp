@@ -35,7 +35,6 @@ const DetailPost = () => {
 
   const fetchPosts = (showLoader = true) => {
     setLoader(showLoader);
-    console.log(params);
     api
       .get(
         `/client/fetch_post_detail`,
@@ -47,7 +46,6 @@ const DetailPost = () => {
       )
       .then((res) => {
         setLoader(false);
-        console.log(res);
         if (res.success) {
           const isFound = res.data.likes.find(
             (lik) => lik.created_by === user.user._id
@@ -87,9 +85,9 @@ const DetailPost = () => {
     //   "",
     //   window.location.origin + "/" + params.id.replace(" ", "-").toLowerCase()
     // );
-    navigate("../detail-post/" + params.id.replaceAll(" ", "-"), {
-      replace: true,
-    });
+    // navigate("../detail-post/" + params.id.replaceAll(" ", "-"), {
+    //   replace: true,
+    // });
     fetchPosts();
   }, [params.id]);
 
@@ -109,7 +107,6 @@ const DetailPost = () => {
         setCreateCommentLoader(false);
         setCommentVal("");
         fetchComments(false);
-        console.log("submit", res);
       })
       .catch((err) => {
         console.log("submiterr", err);
@@ -140,7 +137,6 @@ const DetailPost = () => {
         rftoken_id: localStorage.getItem("rftoken_id"),
       })
       .then((res) => {
-        console.log("res", res);
         fetchPosts(false);
       })
       .catch((err) => {
@@ -171,7 +167,7 @@ const DetailPost = () => {
             top: 0,
             right: 0,
             background: "#fff",
-            zIndex: 100,
+            zIndex: 9999,
             padding: 3,
           }}
         >
@@ -317,7 +313,7 @@ const DetailPost = () => {
     return (
       <Box sx={{ marginTop: 15 }}>
         {showCommentBox && CommentView()}
-        <Card sx={{ padding: 2 }}>
+        <Card sx={{ width: 800, margin: "auto",padding: 2 }}>
           <Box display="flex" alignItems="center">
             <Avatar sx={{ marginRight: 2 }}>D</Avatar>
             <Box>
