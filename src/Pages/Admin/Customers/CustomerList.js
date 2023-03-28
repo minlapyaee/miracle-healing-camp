@@ -93,7 +93,7 @@ const CustomerLists = () => {
             <Table sx={{ minWidth: 700 }} aria-label="customized table">
               <TableHead>
                 <TableRow>
-                  <StyledTableCell>ID</StyledTableCell>
+                  <StyledTableCell>Name</StyledTableCell>
                   <StyledTableCell align="right">Date</StyledTableCell>
                   <StyledTableCell align="right">Status</StyledTableCell>
                   <StyledTableCell align="right"></StyledTableCell>

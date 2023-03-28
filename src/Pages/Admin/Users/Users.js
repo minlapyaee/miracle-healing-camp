@@ -20,8 +20,8 @@ import { UserContext } from "../../../context/userContext";
 import moment from "moment";
 import CircularCustomLoader from "../../../components/CircularCustomLoader";
 
-const AppointmentLists = () => {
-  const [appointmentList, setAppointmentList] = useState([]);
+const Users = () => {
+  const [userList, setUserList] = useState([]);
   const [loader, setLoader] = useState(true);
   const navigate = useNavigate();
   const { user } = useContext(UserContext);
@@ -29,7 +29,7 @@ const AppointmentLists = () => {
   useEffect(() => {
     api
       .get(
-        "/admin/appointment_list",
+        "/admin/user-list",
         {},
         {
           accessToken: user.accessToken,
@@ -37,9 +37,10 @@ const AppointmentLists = () => {
         }
       )
       .then((res) => {
+        console.log("res", res);
         setLoader(false);
         if (res.message === "success") {
-          setAppointmentList(res.data);
+          setUserList(res.data);
         }
       })
       .catch((err) => {
@@ -86,57 +87,29 @@ const AppointmentLists = () => {
       <Box mt={8}>
         <Box sx={{ backgroundColor: "white", borderRadius: 1 }} mt={3} p={3}>
           <Typography variant="h4" mb={3} fontWeight="bold">
-            Appointment List
+            User List
           </Typography>
           <TableContainer component={Paper}>
             <Table sx={{ minWidth: 700 }} aria-label="customized table">
               <TableHead>
                 <TableRow>
+                  <StyledTableCell>Email</StyledTableCell>
                   <StyledTableCell>Name</StyledTableCell>
-                  <StyledTableCell align="right">Date</StyledTableCell>
-                  <StyledTableCell align="right">Status</StyledTableCell>
-                  <StyledTableCell align="right"></StyledTableCell>
+                  <StyledTableCell align="right">Joined at</StyledTableCell>
                 </TableRow>
               </TableHead>
               <TableBody>
-                {appointmentList &&
-                  appointmentList.map((item) => (
-                    <StyledTableRow key={item._id}>
+                {userList &&
+                  userList.map((user) => (
+                    <StyledTableRow key={user._id}>
                       <StyledTableCell component="th" scope="row">
-                        {item.requested_by.fullname}
+                        {user.email}
+                      </StyledTableCell>
+                      <StyledTableCell component="th" scope="row">
+                        {user.fullname}
                       </StyledTableCell>
                       <StyledTableCell align="right">
-                        {moment(item.createdAt).format("MMM DD, YYYY")}
-                      </StyledTableCell>
-                      <StyledTableCell
-                        align="right"
-                        sx={{
-                          color:
-                            item.status === "verified"
-                              ? "rgba(124, 210, 39, 1)"
-                              : "rgb(214 146 0)",
-                          fontWeight: "600",
-                          textTransform: "capitalize",
-                        }}
-                      >
-                        {item.status}
-                      </StyledTableCell>
-                      <StyledTableCell align="right">
-                        <Box
-                          display="flex"
-                          justifyContent="flex-end"
-                          alignItems="center"
-                        >
-                          <EditIcon
-                            sx={{
-                              cursor: "pointer",
-                            }}
-                            onClick={() =>
-                              navigate(`/appointment-detail/${item._id}`)
-                            }
-                          />
-                          {/* <Box ml={2} sx={{ cursor: "pointer" }}>Audit</Box> */}
-                        </Box>
+                        {moment(user.created_at).format("MMM DD, YYYY")}
                       </StyledTableCell>
                     </StyledTableRow>
                   ))}
@@ -149,4 +122,4 @@ const AppointmentLists = () => {
   );
 };
 
-export default AppointmentLists;
+export default Users;

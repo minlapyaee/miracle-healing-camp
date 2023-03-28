@@ -1,8 +1,10 @@
 import {
+  Alert,
   Button,
   CircularProgress,
   FormControl,
   Modal,
+  Snackbar,
   TextField,
   Typography,
 } from "@mui/material";
@@ -14,8 +16,11 @@ import { UserContext } from "../context/userContext";
 const AuthModal = ({ openModal, handleCloseModal }) => {
   const { setUser } = useContext(UserContext);
   const [showOTPForm, setShowOTPForm] = useState(false);
+  const [showForgotPasswordForm, setShowForgotPasswordForm] = useState(false);
   const [loading, setLoading] = useState(false);
   const [loginResponseMessage, setloginResponseMessage] = useState("");
+  const [showSuccessAlertForgotPwd, setShowSuccessAlertForgotPwd] =
+    useState(false);
   const [registerResponseMessage, setregisterResponseMessage] = useState("");
   const [formData, setFormData] = useState({
     email: "",
@@ -32,6 +37,7 @@ const AuthModal = ({ openModal, handleCloseModal }) => {
     fullnameError: false,
   });
   const [otpCode, setOtpCode] = useState("");
+  const [forgotPwdEmail, setForgotPwdEmail] = useState("");
   const [otpError, setOtpError] = useState("");
   const [showLoginForm, setShowLoginForm] = useState(true);
 
@@ -290,9 +296,36 @@ const AuthModal = ({ openModal, handleCloseModal }) => {
                 fullname: "",
               });
               setShowLoginForm(false);
+              setShowForgotPasswordForm(false);
             }}
           >
             Don't have an account?
+          </Typography>
+        </Box>
+        <Box align="center">
+          <Typography
+            component="a"
+            variant="subtitle2"
+            sx={{
+              cursor: "pointer",
+              "&:hover": { textDecoration: "underline" },
+            }}
+            onClick={() => {
+              setError({
+                emailError: false,
+                passwordError: false,
+                fullnameError: false,
+              });
+              setFormRegisterData({
+                email: "",
+                password: "",
+                fullname: "",
+              });
+              setShowLoginForm(false);
+              setShowForgotPasswordForm(true);
+            }}
+          >
+            Forgot Password
           </Typography>
         </Box>
       </>
@@ -505,49 +538,172 @@ const AuthModal = ({ openModal, handleCloseModal }) => {
     );
   };
 
+  const handleForgotPasswordSubmit = () => {
+    setLoading(true);
+    api
+      .post(
+        "/user/forgot_password",
+        JSON.stringify({ email: forgotPwdEmail }),
+        {}
+      )
+      .then((res) => {
+        setLoading(false);
+        setShowSuccessAlertForgotPwd(true);
+        console.log("forgot", res);
+        // if (res.message === "success") {
+        //   setShowResetSuccessAlert(true);
+        // }
+      })
+      .catch((err) => {
+        console.log("errr", err);
+      });
+  };
+
+  const ForgotPasswordForm = () => {
+    return (
+      <>
+        <div>
+          <Typography
+            id="modal-modal-title"
+            variant="h6"
+            component="h2"
+            align="center"
+            fontWeight="bold"
+            color="primary"
+          >
+            Forgot Password
+          </Typography>
+
+          <FormControl fullWidth sx={{ marginTop: 4 }}>
+            <Typography variant="subtitle2" mb={0.5}>
+              Please enter your mail.
+            </Typography>
+            <TextField
+              name="forgot_pwd_email"
+              data-testid="form-field-url"
+              size="small"
+              sx={{
+                ".MuiInputBase-input": { fontSize: 14 },
+              }}
+              onChange={(e) => setForgotPwdEmail(e.target.value)}
+            />
+          </FormControl>
+        </div>
+        {loading ? (
+          <Box display="flex" justifyContent="center" mt={4}>
+            <CircularProgress size={24} />
+          </Box>
+        ) : (
+          <Button
+            // loading={submit}
+            type="submit"
+            variant="contained"
+            sx={{
+              borderRadius: 99999,
+              width: "100%",
+              paddingTop: "1rem",
+              paddingBottom: "1rem",
+              fontWeight: 700,
+              textTransform: "none",
+              fontSize: 16,
+              marginTop: 4,
+            }}
+            onClick={handleForgotPasswordSubmit}
+          >
+            Send
+          </Button>
+        )}
+        <Box align="center">
+          <Typography
+            component="a"
+            variant="subtitle2"
+            sx={{
+              cursor: "pointer",
+              "&:hover": { textDecoration: "underline" },
+            }}
+            onClick={() => {
+              setError({
+                emailError: false,
+                passwordError: false,
+                fullnameError: false,
+              });
+              setFormData({
+                email: "",
+                password: "",
+              });
+              setShowLoginForm(true);
+            }}
+          >
+            Have an account?
+          </Typography>
+        </Box>
+      </>
+    );
+  };
+
   return (
-    <Modal
-      open={openModal}
-      onClose={() => {
-        setError({
-          emailError: false,
-          passwordError: false,
-        });
-        handleCloseModal();
-        setShowOTPForm(false);
-        setloginResponseMessage(false);
-        setregisterResponseMessage("");
-        setFormData({ email: "", password: "" });
-        setFormRegisterData({ email: "", password: "", fullname: "" });
-        setShowLoginForm(true);
-      }}
-      aria-labelledby="modal-modal-title"
-      aria-describedby="modal-modal-description"
-    >
-      <Box
-        sx={{
-          position: "absolute",
-          top: "50%",
-          left: "50%",
-          transform: "translate(-50%, -50%)",
-          width: 400,
-          height: showLoginForm ? 400 : 450,
-          bgcolor: "whiteColor",
-          boxShadow: 24,
-          p: 4,
-          borderRadius: 3,
-          display: "flex",
-          flexDirection: "column",
-          justifyContent: showOTPForm ? "space-between" : "space-around",
-        }}
+    <>
+      <Snackbar
+        open={showSuccessAlertForgotPwd}
+        anchorOrigin={{ vertical: "bottom", horizontal: "center" }}
       >
-        {showOTPForm
-          ? otpForm()
-          : showLoginForm
-          ? LoginInputs()
-          : RegisterInputs()}
-      </Box>
-    </Modal>
+        <Alert
+          severity={"success"}
+          onClose={() => {
+            setShowSuccessAlertForgotPwd(false);
+          }}
+        >
+          Sent Reset Password Link. Please check your mail
+        </Alert>
+      </Snackbar>
+      <Modal
+        open={openModal}
+        onClose={() => {
+          setError({
+            emailError: false,
+            passwordError: false,
+          });
+          handleCloseModal();
+          setShowOTPForm(false);
+          setloginResponseMessage(false);
+          setregisterResponseMessage("");
+          setFormData({ email: "", password: "" });
+          setFormRegisterData({ email: "", password: "", fullname: "" });
+          setShowLoginForm(true);
+        }}
+        aria-labelledby="modal-modal-title"
+        aria-describedby="modal-modal-description"
+      >
+        <Box
+          sx={{
+            position: "absolute",
+            top: "50%",
+            left: "50%",
+            transform: "translate(-50%, -50%)",
+            width: 400,
+            height: showLoginForm ? 400 : 450,
+            bgcolor: "whiteColor",
+            boxShadow: 24,
+            p: 4,
+            borderRadius: 3,
+            display: "flex",
+            flexDirection: "column",
+            justifyContent:
+              showOTPForm || showForgotPasswordForm
+                ? "space-between"
+                : "space-around",
+          }}
+        >
+          {showOTPForm
+            ? otpForm()
+            : showLoginForm
+            ? LoginInputs()
+            : showForgotPasswordForm
+            ? ForgotPasswordForm()
+            : RegisterInputs()}
+        </Box>
+      </Modal>
+    </>
   );
 };
 export default AuthModal;

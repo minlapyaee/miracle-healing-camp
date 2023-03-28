@@ -22,6 +22,9 @@ import ResetPwd from "./Pages/ResetPwd/ResetPwd";
 import ClassList from "./Pages/Admin/ClassForm/ClassList";
 import ClassForm from "./Pages/Admin/ClassForm/ClassForm";
 import Classes from "./Pages/Classes/Classes";
+import Users from "./Pages/Admin/Users/Users";
+import Admins from "./Pages/Admin/AdminsList/Admins";
+import AdminForm from "./Pages/Admin/AdminsList/AdminForm";
 
 const routes = [
   {
@@ -71,6 +74,12 @@ const routes = [
     key: "CLASSES",
     exact: true,
     component: Classes,
+  },
+  {
+    path: "/reset-password/:id",
+    key: "RESET_PASSWORD",
+    exact: true,
+    component: ResetPwd,
   },
 ];
 
@@ -158,6 +167,25 @@ const userRoutes = [
 const adminRoutes = [
   {
     path: "/",
+    key: "USER_LIST",
+    exact: true,
+    component: Users,
+  },
+  {
+    path: "/admin-list",
+    key: "ADMIN_LIST",
+    exact: true,
+    component: Admins,
+  },
+  {
+    path: "/create-admin",
+    key: "CREATE_ADMIN",
+    exact: true,
+    component: AdminForm,
+  },
+
+  {
+    path: "/customers",
     key: "CUSTOMER_LISTS",
     exact: true,
     component: CustomerLists,
@@ -210,7 +238,6 @@ const adminRoutes = [
     exact: true,
     component: ClassForm,
   },
-  
 ];
 
 export { routes, userRoutes, adminRoutes };

@@ -18,7 +18,7 @@ const Profile = () => {
   const { user, setUser } = useContext(UserContext);
   const [fullname, setFullname] = useState(user.user.fullname);
   const [showError, setShowError] = useState(null);
-  const [showResetSuccessAlert, setShowResetSuccessAlert] = useState(false)
+  const [showResetSuccessAlert, setShowResetSuccessAlert] = useState(false);
   const [resetLoader, setResetLoader] = useState(false);
   const [showSuccess, setShowSuccess] = useState(false);
 
@@ -63,7 +63,7 @@ const Profile = () => {
       .then((res) => {
         setResetLoader(false);
         if (res.message === "success") {
-          setShowResetSuccessAlert(true)
+          setShowResetSuccessAlert(true);
         }
       })
       .catch((err) => {
@@ -158,18 +158,18 @@ const Profile = () => {
           Update
         </Button>
         <Snackbar
-                    open={showResetSuccessAlert}
-                    anchorOrigin={{ vertical: "bottom", horizontal: "center" }}
-                  >
-                    <Alert
-                      severity={"success"}
-                      onClose={() => {
-                        setShowResetSuccessAlert(false)
-                      }}
-                    >
-                     Sent Reset Password Link. Please check your mail
-                    </Alert>
-                      </Snackbar>
+          open={showResetSuccessAlert}
+          anchorOrigin={{ vertical: "bottom", horizontal: "center" }}
+        >
+          <Alert
+            severity={"success"}
+            onClose={() => {
+              setShowResetSuccessAlert(false);
+            }}
+          >
+            Sent Reset Password Link. Please check your mail
+          </Alert>
+        </Snackbar>
         <Box mt={5}>
           {resetLoader ? (
             <CircularProgress

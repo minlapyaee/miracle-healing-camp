@@ -28,11 +28,19 @@ import { UserContext } from "../context/userContext";
 
 const navItems = [
   {
-    name: "Customer List",
+    name: "Users",
     url: "/",
   },
   {
-    name: "Appointment List",
+    name: "Admins",
+    url: "/admin-list",
+  },
+  {
+    name: "Customers",
+    url: "/customers",
+  },
+  {
+    name: "Appointments",
     url: "/appointment-list",
   },
   {
