@@ -18,6 +18,7 @@ import api from "../../../config/api";
 import { UserContext } from "../../../context/userContext";
 import { useParams } from "react-router-dom";
 import moment from "moment";
+import { Helmet } from "react-helmet";
 import { useNavigate } from "react-router-dom";
 
 const DetailPost = () => {
@@ -315,6 +316,10 @@ const DetailPost = () => {
   if (post) {
     return (
       <Box sx={{ marginTop: 15 }}>
+        <Helmet>
+          <meta charSet="utf-8" />
+          <title>{post.post.title}</title>
+        </Helmet>
         {showCommentBox && CommentView()}
         <Card sx={{ width: 800, margin: "auto", padding: 2 }}>
           <Box display="flex" alignItems="center">
