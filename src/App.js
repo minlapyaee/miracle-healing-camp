@@ -30,7 +30,7 @@ function App() {
         console.log("err => ", err);
       });
   };
-console.log('hello')
+
   useEffect(() => {
     if (user?.rftoken_id) {
       localStorage.setItem("rftoken_id", user?.rftoken_id);
@@ -68,7 +68,7 @@ console.log('hello')
                 {adminRoutes.map((route) => (
                   <Route
                     key={route.key}
-                    path={ route.path}
+                    path={route.path}
                     exact={route.exact}
                     element={<route.component {...route} />}
                   />
