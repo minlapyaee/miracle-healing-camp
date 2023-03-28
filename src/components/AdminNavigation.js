@@ -25,6 +25,7 @@ import DragHandleIcon from "@mui/icons-material/DragHandle";
 import AuthModal from "./AuthModal";
 import { useLocation, useNavigate } from "react-router-dom";
 import { UserContext } from "../context/userContext";
+import Logo from "../assets/logo.jpg";
 
 const navItems = [
   {
@@ -160,11 +161,11 @@ function AdminNavigation(props) {
         >
           <Box>
             <Link
-              href="#"
-              variant="h6"
-              component="div"
+              href="/"
               sx={{
-                flexGrow: 1,
+                // flexGrow: 1,
+                width: 50,
+                height: 50,
                 display: { xs: "none", sm: "block" },
                 fontWeight: 900,
                 fontSize: 26,
@@ -176,7 +177,7 @@ function AdminNavigation(props) {
                 },
               }}
             >
-              Camps
+              <img src={Logo} alt="logo" width="100%" height="100%" />
             </Link>
           </Box>
 
