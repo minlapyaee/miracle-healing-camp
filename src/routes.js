@@ -64,10 +64,16 @@ const routes = [
     component: QA3,
   },
   {
-    path: "/blog",
-    key: "BLOG",
+    path: "/community",
+    key: "Blog",
     exact: true,
     component: Blog,
+  },
+  {
+    path: "/detail-post/:id/:permalink",
+    key: "DETAIL_POST",
+    exact: true,
+    component: DetailPost,
   },
   {
     path: "/classes",
@@ -87,25 +93,25 @@ const userRoutes = [
   {
     path: "/",
     key: "Home",
-    exact: "true",
+    exact: true,
     component: Home,
-  },
-  {
-    path: "/blog",
-    key: "Blog",
-    exact: "true",
-    component: Blog,
   },
   {
     path: "/make-an-appointment",
     key: "Booking",
-    exact: "true",
+    exact: true,
     component: Booking,
   },
   {
-    path: "/detail-post/:id",
+    path: "/community",
+    key: "Blog",
+    exact: true,
+    component: Blog,
+  },
+  {
+    path: "/detail-post/:id/:permalink",
     key: "DETAIL_POST",
-    exact: "true",
+    exact: true,
     component: DetailPost,
   },
   {

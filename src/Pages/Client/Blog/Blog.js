@@ -321,7 +321,7 @@ const Blog = (props) => {
 
   if (loader) {
     return (
-      <Box  sx={{ width: 800, margin: "auto", marginTop: 15 }}>
+      <Box sx={{ width: 800, margin: "auto", marginTop: 15 }}>
         <Skeleton variant="rectangular" fullWidth height={130} />;
         <Skeleton variant="rectangular" fullWidth mt={2} height={300} />;
         <Skeleton variant="rectangular" fullWidth mt={2} height={300} />;
@@ -331,84 +331,86 @@ const Blog = (props) => {
   return (
     <Box sx={{ width: 800, margin: "auto", marginTop: 15 }}>
       {createContentModal()}
-      <Paper
-        sx={{
-          minHeight: 130,
-          padding: 2,
-          display: "flex",
-          flexDirection: "column",
-          justifyContent: "space-between",
-          borderRadius: 2,
-        }}
-      >
-        <Box display="flex" justifyContent="flex-start" alignItems="center">
-          <Avatar sx={{ marginRight: 2 }}>N</Avatar>
-          <Box
-            sx={{
-              backgroundColor: "#F4F4F4",
-              borderRadius: 99999,
-              flex: 1,
-              padding: 1,
-              paddingLeft: 3,
-            }}
-            onClick={() => setOpenModal(true)}
-          >
-            <Typography sx={{ color: "#9F9F9F", fontSize: 14 }}>
-              What do you want to ask or share?
-            </Typography>
+      {user?.accessToken && (
+        <Paper
+          sx={{
+            minHeight: 130,
+            padding: 2,
+            display: "flex",
+            flexDirection: "column",
+            justifyContent: "space-between",
+            borderRadius: 2,
+          }}
+        >
+          <Box display="flex" justifyContent="flex-start" alignItems="center">
+            <Avatar sx={{ marginRight: 2 }}>N</Avatar>
+            <Box
+              sx={{
+                backgroundColor: "#F4F4F4",
+                borderRadius: 99999,
+                flex: 1,
+                padding: 1,
+                paddingLeft: 3,
+              }}
+              onClick={() => setOpenModal(true)}
+            >
+              <Typography sx={{ color: "#9F9F9F", fontSize: 14 }}>
+                What do you want to ask or share?
+              </Typography>
+            </Box>
           </Box>
-        </Box>
-        <Grid container>
-          <Grid
-            item
-            xs={6}
-            align="center"
-            sx={{
-              color: "#6C6C6C",
-              display: "flex",
-              justifyContent: "center",
-              padding: 1,
-              "&:hover": { backgroundColor: "#F4F4F4" },
-              fontSize: 14,
-            }}
-            onClick={() => {
-              setType("question");
-              setOpenModal(true);
-              setTitle("");
-              setContent(null);
-              setQuestionVal("");
-              setEditorState(RichTextEditor.createEmptyValue());
-            }}
-          >
-            <HelpCenterIcon fontSize="small" sx={{ marginRight: 1 }} />
-            Ask
+          <Grid container>
+            <Grid
+              item
+              xs={6}
+              align="center"
+              sx={{
+                color: "#6C6C6C",
+                display: "flex",
+                justifyContent: "center",
+                padding: 1,
+                "&:hover": { backgroundColor: "#F4F4F4" },
+                fontSize: 14,
+              }}
+              onClick={() => {
+                setType("question");
+                setOpenModal(true);
+                setTitle("");
+                setContent(null);
+                setQuestionVal("");
+                setEditorState(RichTextEditor.createEmptyValue());
+              }}
+            >
+              <HelpCenterIcon fontSize="small" sx={{ marginRight: 1 }} />
+              Ask
+            </Grid>
+            <Grid
+              item
+              xs={6}
+              align="center"
+              sx={{
+                color: "#6C6C6C",
+                display: "flex",
+                justifyContent: "center",
+                padding: 1,
+                "&:hover": { backgroundColor: "#F4F4F4" },
+                fontSize: 14,
+              }}
+              onClick={() => {
+                setType("story");
+                setOpenModal(true);
+                setTitle("");
+                setContent(null);
+                setQuestionVal("");
+                setEditorState(RichTextEditor.createEmptyValue());
+              }}
+            >
+              <AutoStoriesIcon fontSize="small" sx={{ marginRight: 1 }} />
+              Story
+            </Grid>
           </Grid>
-          <Grid
-            item
-            xs={6}
-            align="center"
-            sx={{
-              color: "#6C6C6C",
-              display: "flex",
-              justifyContent: "center",
-              padding: 1,
-              "&:hover": { backgroundColor: "#F4F4F4" },
-              fontSize: 14,
-            }}
-            onClick={() => {
-              setType("story");
-              setOpenModal(true);
-              setTitle("");
-              setContent(null);
-              setQuestionVal("");
-              setEditorState(RichTextEditor.createEmptyValue());
-            }}
-          >
-            <AutoStoriesIcon fontSize="small" sx={{ marginRight: 1 }} />
-            Story
-          </Grid>
-        </Grid>
-      </Paper>
+        </Paper>
+      )}
 
       {/* Posts */}
       {postList.map((data) => {
@@ -418,7 +420,9 @@ const Blog = (props) => {
             key={post._id}
             layout
             style={{ cursor: "pointer" }}
-            onClick={() => navigate(`/detail-post/${post.title}`)}
+            onClick={() =>
+              navigate(`/detail-post/${post._id}/${post.permalink}`)
+            }
           >
             <RenderPost post={post} data={data} createLike={createLike} />
           </motion.div>

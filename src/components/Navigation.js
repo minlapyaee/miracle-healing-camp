@@ -37,6 +37,10 @@ const navItems = [
     url: "/services",
   },
   {
+    name: "Community",
+    url: "/community",
+  },
+  {
     name: "Classes",
     url: "/classes",
   },

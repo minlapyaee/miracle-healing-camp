@@ -42,7 +42,7 @@ const navItems = [
   },
   {
     name: "Community",
-    url: "/blog",
+    url: "/community",
   },
   {
     name: "Make An Appointment",

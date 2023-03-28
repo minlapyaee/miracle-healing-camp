@@ -71,7 +71,9 @@ const RenderPost = (props) => {
             sx={{ marginRight: 2, borderRadius: 99999 }}
             onClick={(e) => {
               e.stopPropagation();
-              handleLike(post._id, post.created_by._id);
+              if (user.accessToken) {
+                handleLike(post._id, post.created_by._id);
+              }
             }}
           >
             <ThumbUpAltIcon

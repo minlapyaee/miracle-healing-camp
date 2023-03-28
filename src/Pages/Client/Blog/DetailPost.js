@@ -38,7 +38,7 @@ const DetailPost = () => {
     api
       .get(
         `/client/fetch_post_detail`,
-        { title: params.id },
+        { id: params.id },
         {
           accessToken: user.accessToken,
           rftoken_id: localStorage.getItem("rftoken_id"),
@@ -201,67 +201,70 @@ const DetailPost = () => {
           ) : (
             <Box>
               {/* Form */}
-              <Paper sx={{ padding: 2 }}>
-                <Box display="flex" alignItems="center">
-                  <Avatar sx={{ marginRight: 2 }}>
-                    {user.user.fullname[0]}
-                  </Avatar>
-                  <Box>
-                    <Typography variant="subtitle1" component="div">
-                      {user.user.fullname}
-                    </Typography>
-                  </Box>
-                </Box>
-                <TextField
-                  placeholder="What are you thoughts?"
-                  fullWidth
-                  multiline
-                  sx={{
-                    border: "none",
-                    "& fieldset": { border: "none" },
-                    ".MuiInputBase-input": {
-                      fontSize: 13,
-                    },
-                  }}
-                  value={commentVal}
-                  onChange={(e) => setCommentVal(e.target.value)}
-                />
-                <Box
-                  display="flex"
-                  justifyContent="flex-end"
-                  alignItems="center"
-                >
-                  <Button sx={{ marginRight: 3 }}>
-                    {" "}
-                    <Typography
-                      sx={{ fontSize: 14, textTransform: "initial" }}
-                      variant="caption"
-                      onClick={() => setShowCommentBox(false)}
-                    >
-                      Cancel
-                    </Typography>
-                  </Button>
-                  {createCmtLoader ? (
-                    <Box display="flex">
-                      <CircularProgress size={24} />
+              {user.accessToken && (
+                <Paper sx={{ padding: 2 }}>
+                  <Box display="flex" alignItems="center">
+                    <Avatar sx={{ marginRight: 2 }}>
+                      {user.user.fullname[0]}
+                    </Avatar>
+                    <Box>
+                      <Typography variant="subtitle1" component="div">
+                        {user.user.fullname}
+                      </Typography>
                     </Box>
-                  ) : (
-                    <Button
-                      size="medium"
-                      variant="contained"
-                      sx={{ borderRadius: 999 }}
-                      onClick={handleCommentSubmit}
-                    >
+                  </Box>
+                  <TextField
+                    placeholder="What are you thoughts?"
+                    fullWidth
+                    multiline
+                    sx={{
+                      border: "none",
+                      "& fieldset": { border: "none" },
+                      ".MuiInputBase-input": {
+                        fontSize: 13,
+                      },
+                    }}
+                    value={commentVal}
+                    onChange={(e) => setCommentVal(e.target.value)}
+                  />
+                  <Box
+                    display="flex"
+                    justifyContent="flex-end"
+                    alignItems="center"
+                  >
+                    <Button sx={{ marginRight: 3 }}>
+                      {" "}
                       <Typography
                         sx={{ fontSize: 14, textTransform: "initial" }}
                         variant="caption"
+                        onClick={() => setShowCommentBox(false)}
                       >
-                        Respond
+                        Cancel
                       </Typography>
                     </Button>
-                  )}
-                </Box>
-              </Paper>
+                    {createCmtLoader ? (
+                      <Box display="flex">
+                        <CircularProgress size={24} />
+                      </Box>
+                    ) : (
+                      <Button
+                        size="medium"
+                        variant="contained"
+                        sx={{ borderRadius: 999 }}
+                        onClick={handleCommentSubmit}
+                      >
+                        <Typography
+                          sx={{ fontSize: 14, textTransform: "initial" }}
+                          variant="caption"
+                        >
+                          Respond
+                        </Typography>
+                      </Button>
+                    )}
+                  </Box>
+                </Paper>
+              )}
+
               {/* End Form */}
               {/* Comments */}
               <div id="comment-box">
@@ -313,7 +316,7 @@ const DetailPost = () => {
     return (
       <Box sx={{ marginTop: 15 }}>
         {showCommentBox && CommentView()}
-        <Card sx={{ width: 800, margin: "auto",padding: 2 }}>
+        <Card sx={{ width: 800, margin: "auto", padding: 2 }}>
           <Box display="flex" alignItems="center">
             <Avatar sx={{ marginRight: 2 }}>D</Avatar>
             <Box>
@@ -358,9 +361,11 @@ const DetailPost = () => {
           <Box mt={2}>
             <Button
               sx={{ marginRight: 2, borderRadius: 99999 }}
-              onClick={() =>
-                handleLike(post.post._id, post.post.created_by._id)
-              }
+              onClick={() => {
+                if (user.accessToken) {
+                  handleLike(post.post._id, post.post.created_by._id);
+                }
+              }}
             >
               <ThumbUpAltIcon
                 sx={{ color: isLike ? "#36B6F9" : "#636466", marginRight: 1 }}
