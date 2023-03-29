@@ -79,6 +79,7 @@ const inputs = [
 
 const AppointmentDetail = () => {
   const [data, setData] = useState({});
+  const [prevStatus, setPrevStatus] = useState("");
   const [status, setStatus] = useState("pending");
   const [meetingLink, setMeetingLink] = useState({});
   const [showErrorField, setShowErrorField] = useState(false);
@@ -100,6 +101,7 @@ const AppointmentDetail = () => {
         if (res.message === "success") {
           setData(res.data);
           setMeetingLink(res.meeting);
+          setPrevStatus(res.data.status);
           setStatus(
             res.data.status.charAt(0).toUpperCase() + res.data.status.slice(1)
           );
@@ -111,6 +113,7 @@ const AppointmentDetail = () => {
   }, []);
 
   const handleSubmit = () => {
+    const reason = `${user.user.fullname} updated from ${prevStatus.toLowerCase()} to ${status.toLowerCase()}.`;
     setLoading(true);
     setShowErrorField(false);
     const formData = {
@@ -118,6 +121,10 @@ const AppointmentDetail = () => {
       appointment_id: data._id,
       id: params.id,
     };
+    if (status.toLowerCase() !== prevStatus.toLowerCase()) {
+      formData["reason"] = reason;
+    }
+    setPrevStatus(status)
     let arr = ["pending", "progress", "completed"];
     if (!status) {
       setLoading(false);

@@ -4,7 +4,7 @@ import CircularProgress, {
 } from "@mui/material/CircularProgress";
 import { Box } from "@mui/system";
 
-const CircularCustomLoader = () => {
+const CircularCustomLoader = ({size}) => {
   return (
     <Box sx={{ position: "relative" }}>
       <CircularProgress
@@ -13,7 +13,7 @@ const CircularCustomLoader = () => {
           color: (theme) =>
             theme.palette.grey[theme.palette.mode === "light" ? 200 : 800],
         }}
-        size={40}
+        size={size || 40}
         thickness={4}
         value={100}
       />
@@ -30,7 +30,7 @@ const CircularCustomLoader = () => {
             strokeLinecap: "round",
           },
         }}
-        size={40}
+        size={size || 40}
         thickness={4}
       />
     </Box>

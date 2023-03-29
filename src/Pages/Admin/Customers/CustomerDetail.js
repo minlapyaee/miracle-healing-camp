@@ -14,8 +14,10 @@ import { UserContext } from "../../../context/userContext";
 
 const CustomerDetail = () => {
   const [image, setImage] = useState(null);
+  const [prevStatus, setPrevStatus] = useState("");
   const { user } = useContext(UserContext);
   const [status, setStatus] = useState("pending");
+  const [statusOptions, setStatusOptions] = useState(["pending", "verified", "expired"]);
   const [showSuccessBox, setShowSuccessBox] = useState(false);
   const [id, setId] = useState(null);
   const params = useParams();
@@ -32,7 +34,14 @@ const CustomerDetail = () => {
       )
       .then((res) => {
         if (res.message === "success") {
+          // if (res.data.status === "pending") {
+          //   setStatusOptions(["pending", "verified"]);
+          // }
+          // if (res.data.status === "verified") {
+          //   setStatusOptions(["verified", "expired"]);
+          // }
           setStatus(res.data.status);
+          setPrevStatus(res.data.status);
           setId(res.data._id);
           setImage(res.data.image);
         }
@@ -43,11 +52,16 @@ const CustomerDetail = () => {
   }, []);
 
   const handleSubmit = () => {
+    const reason = `${user.user.fullname} updated from ${prevStatus} to ${status}.`;
     setShowSuccessBox(false);
     const data = {
       status,
       id,
     };
+    if (status !== prevStatus) {
+      data["reason"] = reason;
+    }
+    setPrevStatus(status)
     api
       .post("/admin/update_customer", JSON.stringify(data), {
         accessToken: user.accessToken,
@@ -110,12 +124,7 @@ const CustomerDetail = () => {
             Screenshot*
           </Typography>
           <Box height={200} mb={3}>
-            <img
-              src={image}
-              alt="screenshot"
-              width="100%"
-              height="100%"
-            />
+            <img src={image} alt="screenshot" width="100%" height="100%" />
           </Box>
 
           <FormControl fullWidth mt={4}>
@@ -128,9 +137,13 @@ const CustomerDetail = () => {
               onChange={(e) => setStatus(e.target.value)}
               size="small"
             >
-              <MenuItem value="pending">Pending</MenuItem>
-              <MenuItem value="verified">Verified</MenuItem>
-              <MenuItem value="expired">Expired</MenuItem>
+              {statusOptions &&
+                statusOptions.map((option) => (
+                  <MenuItem value={option} sx={{ textTransform: "capitalize" }}>
+                    {option.charAt(0).toUpperCase()}
+                    {option.slice(1)}
+                  </MenuItem>
+                ))}
             </Select>
           </FormControl>
         </Box>

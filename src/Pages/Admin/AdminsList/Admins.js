@@ -146,7 +146,7 @@ const Admins = () => {
             Created by {audit?.created_by?.fullname}.
             <Typography variant="span" sx={{ fontSize: 13, color: "#7e7c7c" }}>
               &nbsp; -{" "}
-              {moment(audit?.data?.createdAt).format("DD MMMM YYYY, h:mm a")}
+              {moment(audit?.createdAt).format("DD MMMM YYYY, h:mm a")}
             </Typography>
           </Typography>
         </Box>
