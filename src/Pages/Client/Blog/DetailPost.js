@@ -19,6 +19,7 @@ import { UserContext } from "../../../context/userContext";
 import { useParams } from "react-router-dom";
 import moment from "moment";
 import { Helmet } from "react-helmet";
+import BookmarkIcon from "@mui/icons-material/Bookmark";
 import { useNavigate } from "react-router-dom";
 
 const DetailPost = () => {
@@ -31,6 +32,9 @@ const DetailPost = () => {
   const [loader, setLoader] = useState(true);
   const [commentLoader, setCommentLoader] = useState(true);
   const [createCmtLoader, setCreateCommentLoader] = useState(false);
+  const [likeCount, setLikeCount] = useState(0);
+  const [commentCount, setCommentCount] = useState(0);
+  const [isSavedPost, setIsSavedPost] = useState(false);
   const params = useParams();
   const navigate = useNavigate();
 
@@ -48,12 +52,13 @@ const DetailPost = () => {
       .then((res) => {
         setLoader(false);
         if (res.success) {
-          const isFound = res.data.likes.find(
-            (lik) => lik.created_by === user.user._id
-          );
-          if (isFound) {
-            setIsLike(true);
-          }
+          // const isFound = res.data.likes.find(
+          //   (lik) => lik.created_by === user.user._id
+          // );
+          setIsSavedPost(res.data.isSavedPost);
+          setLikeCount(res.data.likeCount);
+          setCommentCount(res.data.commentCount)
+          setIsLike(res.data.isLike);
           setPost(res.data);
         }
       })
@@ -81,19 +86,12 @@ const DetailPost = () => {
   };
 
   useEffect(() => {
-    // window.history.pushState(
-    //   "",
-    //   "",
-    //   window.location.origin + "/" + params.id.replace(" ", "-").toLowerCase()
-    // );
-    // navigate("../detail-post/" + params.id.replaceAll(" ", "-"), {
-    //   replace: true,
-    // });
     fetchPosts();
   }, [params.id]);
 
   const handleCommentSubmit = () => {
     setCreateCommentLoader(true);
+    setCommentCount(prev => prev + 1 )
     let data = {
       post_id: post.post._id,
       content: commentVal,
@@ -116,20 +114,13 @@ const DetailPost = () => {
 
   const handleLike = (post_id, post_owner_id) => {
     const clonePostList = post;
-
-    const findIndex = clonePostList.likes.findIndex(
-      (like) => like.created_by === user.user._id
-    );
-    if (findIndex === -1) {
-      clonePostList.likes.push({
-        created_by: user.user._id,
-      });
-      setIsLike(true);
+    if (isLike) {
+      setLikeCount((prev) => prev - 1);
     } else {
-      clonePostList.likes.splice(clonePostList.likes.indexOf(findIndex), 1);
-      setIsLike(false);
+      setLikeCount((prev) => prev + 1);
     }
 
+    setIsLike((prev) => !prev);
     setPost(clonePostList);
 
     api
@@ -139,6 +130,24 @@ const DetailPost = () => {
       })
       .then((res) => {
         fetchPosts(false);
+      })
+      .catch((err) => {
+        console.log("errr", err);
+      });
+  };
+
+  const handleSavePost = (post_id) => {
+    if (post.isSavedPost) {
+      setIsSavedPost(false);
+    } else {
+      setIsSavedPost(true);
+    }
+    api
+      .post("/client/saved_post", JSON.stringify({ post_id: post.post._id }), {
+        accessToken: user.accessToken,
+        rftoken_id: localStorage.getItem("rftoken_id"),
+      })
+      .then((res) => {
       })
       .catch((err) => {
         console.log("errr", err);
@@ -322,21 +331,40 @@ const DetailPost = () => {
         </Helmet>
         {showCommentBox && CommentView()}
         <Card sx={{ width: 800, margin: "auto", padding: 2 }}>
-          <Box display="flex" alignItems="center">
-            <Avatar sx={{ marginRight: 2 }}>D</Avatar>
+          <Box
+            display="flex"
+            alignItems="center"
+            justifyContent="space-between"
+          >
+            <Box display="flex" alignItems="center">
+              <Avatar sx={{ marginRight: 2 }}>D</Avatar>
+              <Box>
+                <Typography variant="subtitle1" component="div">
+                  {post.post.created_by.fullname}
+                </Typography>
+                <Typography
+                  variant="caption"
+                  component="div"
+                  sx={{ marginTop: -1, color: "#9F9F9F" }}
+                >
+                  {moment(post.post.created_at).format("LLL")}
+                </Typography>
+              </Box>
+            </Box>
             <Box>
-              <Typography variant="subtitle1" component="div">
-                {post.post.created_by.fullname}
-              </Typography>
-              <Typography
-                variant="caption"
-                component="div"
-                sx={{ marginTop: -1, color: "#9F9F9F" }}
-              >
-                {moment(post.post.created_at).format("LLL")}
-              </Typography>
+              <BookmarkIcon
+                sx={{
+                  color: isSavedPost ? "#36B6F9" : "#636466",
+                }}
+                onClick={(e) => {
+                  e.preventDefault();
+                  e.stopPropagation();
+                  handleSavePost(post._id);
+                }}
+              />
             </Box>
           </Box>
+
           <Box sx={{ marginTop: 2 }}>
             <Typography variant="h6" fontWeight="bold">
               {post.post.title}
@@ -375,7 +403,8 @@ const DetailPost = () => {
               <ThumbUpAltIcon
                 sx={{ color: isLike ? "#36B6F9" : "#636466", marginRight: 1 }}
               />
-              {post.likes.length}
+              {/* {post.likes.length} */}
+              {likeCount}
             </Button>
             <Button
               sx={{ borderRadius: 99999 }}
@@ -383,6 +412,7 @@ const DetailPost = () => {
               onClick={handleClickCommentBox}
             >
               <ChatBubbleIcon sx={{ color: "#636466", marginRight: 1 }} />
+              {commentCount}
             </Button>
           </Box>
         </Card>

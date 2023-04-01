@@ -1,5 +1,13 @@
 import React, { useContext, useState, useEffect } from "react";
-import { Alert, Box, Button, FormControl, TextField, Typography, Snackbar } from "@mui/material";
+import {
+  Alert,
+  Box,
+  Button,
+  FormControl,
+  TextField,
+  Typography,
+  Snackbar,
+} from "@mui/material";
 import api from "../../../config/api";
 import { UserContext } from "../../../context/userContext";
 import { useNavigate, useParams } from "react-router-dom";
@@ -49,8 +57,8 @@ const AdminForm = () => {
   }, []);
 
   const handleSubmit = () => {
-    setShowSuccessBox(false)
-    setShowFailBox(false)
+    setShowSuccessBox(false);
+    setShowFailBox(false);
     let cloneFormData = { ...formData };
     // if(id) {
     //     cloneFormData['class_id'] = id
@@ -61,13 +69,12 @@ const AdminForm = () => {
         rftoken_id: localStorage.getItem("rftoken_id"),
       })
       .then((res) => {
-        if(res.message === "success") {
-            setShowSuccessBox(true)
+        if (res.message === "success") {
+          setShowSuccessBox(true);
         }
-        if(res.message === "failed") {
-                setShowFailBox(true)
+        if (res.message === "failed") {
+          setShowFailBox(true);
         }
-        console.log("res", res);
         // navigate("/classes");
       })
       .catch((err) => {
@@ -77,7 +84,7 @@ const AdminForm = () => {
 
   return (
     <Box mt={13}>
-           <Snackbar
+      <Snackbar
         open={showFailBox}
         anchorOrigin={{ vertical: "bottom", horizontal: "center" }}
       >

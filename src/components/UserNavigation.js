@@ -214,6 +214,7 @@ function UserNavigation(props) {
                     <MenuItem onClick={() => navigate("/profile")}>
                       Profile
                     </MenuItem>
+                    <MenuItem onClick={() => navigate("/bookmarks")}>Bookmarks</MenuItem>
                     <MenuItem onClick={handleLogout}>Logout</MenuItem>
                   </Menu>
                 </>

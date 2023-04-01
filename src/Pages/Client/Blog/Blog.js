@@ -23,6 +23,7 @@ import api from "../../../config/api";
 import { UserContext } from "../../../context/userContext";
 import { motion } from "framer-motion";
 import RenderPost from "../../../components/RenderPost";
+import NoDataFound from "../../../components/NoDataFound";
 
 const toolbarConfig = {
   // Optionally specify the groups to display (displayed in the order listed).
@@ -99,6 +100,7 @@ const Blog = (props) => {
         }
       )
       .then((res) => {
+        console.log("res", res);
         setLoader(false);
         if (res.success) {
           setPostList(res.data);
@@ -411,23 +413,25 @@ const Blog = (props) => {
           </Grid>
         </Paper>
       )}
+      {postList.lenght === 0 && <NoDataFound title="No Posts Found." />}
 
       {/* Posts */}
-      {postList.map((data) => {
-        const post = data.post;
-        return (
-          <motion.div
-            key={post._id}
-            layout
-            style={{ cursor: "pointer" }}
-            onClick={() =>
-              navigate(`/detail-post/${post._id}/${post.permalink}`)
-            }
-          >
-            <RenderPost post={post} data={data} createLike={createLike} />
-          </motion.div>
-        );
-      })}
+      {postList.length > 0 &&
+        postList.map((data) => {
+          const post = data.post;
+          return (
+            <motion.div
+              key={post._id}
+              layout
+              style={{ cursor: "pointer" }}
+              onClick={() =>
+                navigate(`/detail-post/${post._id}/${post.permalink}`)
+              }
+            >
+              <RenderPost post={post} data={data} createLike={createLike} />
+            </motion.div>
+          );
+        })}
     </Box>
   );
 };

@@ -25,6 +25,8 @@ import Classes from "./Pages/Classes/Classes";
 import Users from "./Pages/Admin/Users/Users";
 import Admins from "./Pages/Admin/AdminsList/Admins";
 import AdminForm from "./Pages/Admin/AdminsList/AdminForm";
+import Bookmarks from "./Pages/Client/Bookmarks/Bookmarks";
+import AdminMaintenance from "./Pages/Admin/AdminMaintenance/AdminMaintenance";
 
 const routes = [
   {
@@ -151,6 +153,12 @@ const userRoutes = [
     component: MainBlog,
   },
   {
+    path: "/bookmarks",
+    key: "BOOK_MARKS",
+    exact: true,
+    component: Bookmarks,
+  },
+  {
     path: "/purchase_package",
     key: "PURCHASE_PACKAGE",
     exact: true,
@@ -244,6 +252,12 @@ const adminRoutes = [
     exact: true,
     component: ClassForm,
   },
+  {
+    path: "/maintenance",
+    key: "Maintenance",
+    exact: true,
+    component: AdminMaintenance,
+  }
 ];
 
 export { routes, userRoutes, adminRoutes };

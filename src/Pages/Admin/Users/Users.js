@@ -37,7 +37,6 @@ const Users = () => {
         }
       )
       .then((res) => {
-        console.log("res", res);
         setLoader(false);
         if (res.message === "success") {
           setUserList(res.data);

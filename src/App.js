@@ -10,29 +10,53 @@ import { UserContext } from "./context/userContext";
 import api from "./config/api";
 import NotFoundPage from "./NotFoundPage";
 import AdminNavigation from "./components/AdminNavigation";
+import MaintenancePage from "./MaintenancePage";
 
 function App() {
   const [loading, setLoading] = useState(true);
+  const [showMaintenancePage, setShowMaintenancePage] = useState(false);
   const [user, setUser] = useState({});
 
   const fetchUserInfo = () => {
     api
-      .get(
-        "/user/get_user/",
-        {},
-        { rftoken_id: localStorage.getItem("rftoken_id") }
-      )
-      .then((result) => {
-        setLoading(false);
-        setUser(result);
+      .get("/admin/fetch_maintenance_status", {})
+      .then((res) => {
+        api
+          .get(
+            "/user/get_user/",
+            {},
+            { rftoken_id: localStorage.getItem("rftoken_id") }
+          )
+          .then((result) => {
+            setLoading(false);
+            setUser(result);
+            if (result.user.role === "client") {
+              if (res.data.length === 0) {
+                setShowMaintenancePage(false);
+              } else {
+                setShowMaintenancePage(res.data[0].status);
+              }
+            }
+          })
+          .catch((err) => {
+            console.log("err => ", err);
+          });
       })
-      .catch((err) => {
-        console.log("err => ", err);
-      });
+      .catch((err) => console.log("err", err));
   };
 
   useEffect(() => {
     if (user?.rftoken_id) {
+      api
+        .get("/admin/fetch_maintenance_status", {})
+        .then((res) => {
+          if (res.data.length === 0) {
+            setShowMaintenancePage(false);
+          } else {
+            setShowMaintenancePage(res.data[0].status);
+          }
+        })
+        .catch((err) => console.log("err", err));
       localStorage.setItem("rftoken_id", user?.rftoken_id);
     }
   }, [user]);
@@ -41,59 +65,68 @@ function App() {
     fetchUserInfo();
   }, []);
 
+  useEffect(() => {}, [showMaintenancePage]);
+
   if (loading) {
     return <div>Loading</div>;
   }
+  console.log({ showMaintenancePage });
   return (
-    <ThemeProvider theme={theme}>
-      <UserContext.Provider value={{ user, setUser }}>
-        {user?.accessToken ? (
-          user?.user.role === "client" ? (
-            <UserNavigation>
-              <Routes>
-                {userRoutes.map((route) => (
-                  <Route
-                    key={route.key}
-                    path={route.path}
-                    exact={route.exact}
-                    element={<route.component {...route} />}
-                  />
-                ))}
-                <Route path="*" element={<NotFoundPage />} />
-              </Routes>
-            </UserNavigation>
-          ) : (
-            <AdminNavigation>
-              <Routes>
-                {adminRoutes.map((route) => (
-                  <Route
-                    key={route.key}
-                    path={route.path}
-                    exact={route.exact}
-                    element={<route.component {...route} />}
-                  />
-                ))}
-                <Route path="*" element={<NotFoundPage />} />
-              </Routes>
-            </AdminNavigation>
-          )
-        ) : (
-          <Navigation>
-            <Routes>
-              {routes.map((route) => (
-                <Route
-                  key={route.key}
-                  path={route.path}
-                  exact={route.exact}
-                  element={<route.component {...route} />}
-                />
-              ))}
-              <Route path="*" element={<NotFoundPage />} />
-            </Routes>
-          </Navigation>
-        )}
-      </UserContext.Provider>
-    </ThemeProvider>
+    <>
+      {showMaintenancePage ? (
+        <MaintenancePage />
+      ) : (
+        <ThemeProvider theme={theme}>
+          <UserContext.Provider value={{ user, setUser }}>
+            {user?.accessToken ? (
+              user?.user.role === "client" ? (
+                <UserNavigation>
+                  <Routes>
+                    {userRoutes.map((route) => (
+                      <Route
+                        key={route.key}
+                        path={route.path}
+                        exact={route.exact}
+                        element={<route.component {...route} />}
+                      />
+                    ))}
+                    <Route path="*" element={<NotFoundPage />} />
+                  </Routes>
+                </UserNavigation>
+              ) : (
+                <AdminNavigation>
+                  <Routes>
+                    {adminRoutes.map((route) => (
+                      <Route
+                        key={route.key}
+                        path={route.path}
+                        exact={route.exact}
+                        element={<route.component {...route} />}
+                      />
+                    ))}
+                    <Route path="*" element={<NotFoundPage />} />
+                  </Routes>
+                </AdminNavigation>
+              )
+            ) : (
+              <Navigation>
+                <Routes>
+                  {routes.map((route) => (
+                    <Route
+                      key={route.key}
+                      path={route.path}
+                      exact={route.exact}
+                      element={<route.component {...route} />}
+                    />
+                  ))}
+                  <Route path="*" element={<NotFoundPage />} />
+                </Routes>
+              </Navigation>
+            )}
+          </UserContext.Provider>
+        </ThemeProvider>
+      )}
+    </>
   );
 }
 

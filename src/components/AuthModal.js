@@ -549,7 +549,6 @@ const AuthModal = ({ openModal, handleCloseModal }) => {
       .then((res) => {
         setLoading(false);
         setShowSuccessAlertForgotPwd(true);
-        console.log("forgot", res);
         // if (res.message === "success") {
         //   setShowResetSuccessAlert(true);
         // }

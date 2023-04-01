@@ -46,7 +46,6 @@ const Admins = () => {
         if (res.message === "success") {
           setAudit(res.data);
         }
-        console.log("res", res);
       })
       .catch((err) => {
         console.log("err", err);
@@ -66,7 +65,6 @@ const Admins = () => {
         }
       )
       .then((res) => {
-        console.log("res", res);
         setLoader(false);
         if (res.message === "success") {
           setAdminList(res.data);
