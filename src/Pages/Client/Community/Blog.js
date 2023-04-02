@@ -324,9 +324,9 @@ const Blog = (props) => {
   if (loader) {
     return (
       <Box sx={{ width: 800, margin: "auto", marginTop: 15 }}>
-        <Skeleton variant="rectangular" fullWidth height={130} />;
-        <Skeleton variant="rectangular" fullWidth mt={2} height={300} />;
-        <Skeleton variant="rectangular" fullWidth mt={2} height={300} />;
+        <Skeleton variant="rectangular" fullWidth height={130} />
+        <Skeleton variant="rectangular" fullWidth mt={2} height={300} />
+        <Skeleton variant="rectangular" fullWidth mt={2} height={300} />
       </Box>
     );
   }
@@ -425,7 +425,7 @@ const Blog = (props) => {
               layout
               style={{ cursor: "pointer" }}
               onClick={() =>
-                navigate(`/detail-post/${post._id}/${post.permalink}`)
+                navigate(`/${post._id}/${post.permalink}`)
               }
             >
               <RenderPost post={post} data={data} createLike={createLike} />

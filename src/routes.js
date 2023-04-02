@@ -3,9 +3,9 @@ import LandingPage from "./Pages/LandingPage/LandingPage";
 
 // Client Pages
 import Book from "./Pages/Client/Book/Book";
-import Blog from "./Pages/Client/Blog/Blog";
+import Blog from "./Pages/Client/Community/Blog";
 import MainBlog from "./Pages/Client/MainBlog/MainBlog";
-import DetailPost from "./Pages/Client/Blog/DetailPost";
+import DetailPost from "./Pages/Client/Community/DetailPost";
 import Home from "./Pages/Client/Home/Home";
 import Services from "./Pages/Services/Services";
 import Booking from "./Pages/Client/Booking/Booking";
@@ -72,7 +72,7 @@ const routes = [
     component: Blog,
   },
   {
-    path: "/detail-post/:id/:permalink",
+    path: "/:id/:permalink",
     key: "DETAIL_POST",
     exact: true,
     component: DetailPost,
@@ -111,7 +111,7 @@ const userRoutes = [
     component: Blog,
   },
   {
-    path: "/detail-post/:id/:permalink",
+    path: "/:id/:permalink",
     key: "DETAIL_POST",
     exact: true,
     component: DetailPost,

@@ -57,7 +57,7 @@ const DetailPost = () => {
           // );
           setIsSavedPost(res.data.isSavedPost);
           setLikeCount(res.data.likeCount);
-          setCommentCount(res.data.commentCount)
+          setCommentCount(res.data.commentCount);
           setIsLike(res.data.isLike);
           setPost(res.data);
         }
@@ -91,7 +91,7 @@ const DetailPost = () => {
 
   const handleCommentSubmit = () => {
     setCreateCommentLoader(true);
-    setCommentCount(prev => prev + 1 )
+    setCommentCount((prev) => prev + 1);
     let data = {
       post_id: post.post._id,
       content: commentVal,
@@ -147,8 +147,7 @@ const DetailPost = () => {
         accessToken: user.accessToken,
         rftoken_id: localStorage.getItem("rftoken_id"),
       })
-      .then((res) => {
-      })
+      .then((res) => {})
       .catch((err) => {
         console.log("errr", err);
       });
@@ -319,7 +318,11 @@ const DetailPost = () => {
   };
 
   if (loader) {
-    return <Skeleton variant="rectangular" fullWidth mt={2} height={350} />;
+    return (
+      <Box sx={{ width: 800, margin: "auto", marginTop: 15,  }}>
+        <Skeleton variant="rectangular" fullWidth mt={2} height={350} />
+      </Box>
+    );
   }
 
   if (post) {
