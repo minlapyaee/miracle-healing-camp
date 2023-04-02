@@ -22,6 +22,7 @@ import CircularCustomLoader from "../../../components/CircularCustomLoader";
 
 const Users = () => {
   const [userList, setUserList] = useState([]);
+  const [totalCount, setTotalCount] = useState(0);
   const [loader, setLoader] = useState(true);
   const navigate = useNavigate();
   const { user } = useContext(UserContext);
@@ -40,6 +41,7 @@ const Users = () => {
         setLoader(false);
         if (res.message === "success") {
           setUserList(res.data);
+          setTotalCount(res.totalCount)
         }
       })
       .catch((err) => {
@@ -88,6 +90,9 @@ const Users = () => {
           <Typography variant="h4" mb={3} fontWeight="bold">
             User List
           </Typography>
+          <Box mb={3}>
+            <Typography>Total Users - {totalCount}</Typography>
+          </Box>
           <TableContainer component={Paper}>
             <Table sx={{ minWidth: 700 }} aria-label="customized table">
               <TableHead>

@@ -26,6 +26,7 @@ import SummarizeIcon from "@mui/icons-material/Summarize";
 const Admins = () => {
   const [adminList, setAdminList] = useState([]);
   const [audit, setAudit] = useState({});
+  const [totalCount, setTotalCount] = useState(0);
   const [loader, setLoader] = useState(true);
   const navigate = useNavigate();
   const { user } = useContext(UserContext);
@@ -67,6 +68,7 @@ const Admins = () => {
       .then((res) => {
         setLoader(false);
         if (res.message === "success") {
+          setTotalCount(res.totalCount);
           setAdminList(res.data);
         }
       })
@@ -143,8 +145,7 @@ const Admins = () => {
           <Typography id="modal-modal-description" sx={{ mt: 2 }}>
             Created by {audit?.created_by?.fullname}.
             <Typography variant="span" sx={{ fontSize: 13, color: "#7e7c7c" }}>
-              &nbsp; -{" "}
-              {moment(audit?.createdAt).format("DD MMMM YYYY, h:mm a")}
+              &nbsp; - {moment(audit?.createdAt).format("DD MMMM YYYY, h:mm a")}
             </Typography>
           </Typography>
         </Box>
@@ -170,6 +171,9 @@ const Admins = () => {
             >
               Create New Admin
             </Button>
+          </Box>
+          <Box mb={3}>
+            <Typography>Total Admins - {totalCount}</Typography>
           </Box>
           <TableContainer component={Paper}>
             <Table sx={{ minWidth: 700 }} aria-label="customized table">
