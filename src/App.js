@@ -30,7 +30,7 @@ function App() {
           .then((result) => {
             setLoading(false);
             setUser(result);
-            if (result.user.role === "client") {
+            if (result?.user?.role === "client") {
               if (res.data.length === 0) {
                 setShowMaintenancePage(false);
               } else {
